@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<script>(function(){try{var u=navigator.userAgent||'';var ios=/iPhone|iPad|iPod/.test(u);if(/; wv\)|Twitter|FBAN|FBAV|Instagram|Line\/|TikTok|musical_ly/.test(u)||(ios&&!/Safari/.test(u))||/[?&]inapp=1/.test(location.search))document.documentElement.classList.add('inapp');}catch(e){}})();</script>
 <title>ガサガサ ミュージアム v1.0</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -31,6 +32,9 @@ html[lang=en] .bar span{width:46px}
 #river{display:block;touch-action:none}
 #toast{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(40,35,25,.84);color:#fff;padding:7px 14px;border-radius:18px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis;z-index:5}
 footer{padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));border-top:2px solid var(--line)}
+html.inapp footer{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+html.inapp .panel{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+html.inapp .cine{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 #liftBtn{width:100%;height:54px;border:none;border-radius:16px;background:linear-gradient(#f2a65e,#dc7733);color:#fff;font-size:19px;font-weight:700;letter-spacing:.12em;box-shadow:0 3px 0 #b55c20;font-family:inherit}
 #liftBtn:active{transform:translateY(2px);box-shadow:0 1px 0 #b55c20}
 #liftBtn.broken{background:#a9a39a;box-shadow:0 3px 0 #7d776e;font-size:15px;letter-spacing:0}
