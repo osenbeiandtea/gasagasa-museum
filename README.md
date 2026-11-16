@@ -30,7 +30,10 @@ Made for smartphone browsers in portrait mode. No install needed.
 3. 砂漠のオアシス
 4. 地中海の海岸
 5. イギリスの田園の小川
-6. ……？
+6. マラウイ湖の岩場
+7. インドのモンスーンの川
+8. オーストラリアのビラボン
+9. ……？
 
 それぞれのステージに27種類の生き物・石・化石がいます。
 図鑑を埋めていくと、次の水辺へ行けるようになります。
@@ -60,7 +63,10 @@ Made for smartphone browsers in portrait mode. No install needed.
 3. Desert Oasis
 4. Mediterranean Shore
 5. English Countryside Brook
-6. ...?
+6. Lake Malawi Rocky Shore
+7. Indian Monsoon River
+8. Australian Billabong
+9. ...?
 
 Each stage has 27 creatures, stones and fossils to find.
 Fill your field guide to unlock the next waterside.

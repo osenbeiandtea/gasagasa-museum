@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <script>(function(){try{var u=navigator.userAgent||'';var ios=/iPhone|iPad|iPod/.test(u);if(/; wv\)|Twitter|FBAN|FBAV|Instagram|Line\/|TikTok|musical_ly/.test(u)||(ios&&!/Safari/.test(u))||/[?&]inapp=1/.test(location.search))document.documentElement.classList.add('inapp');}catch(e){}})();</script>
-<title>ガサガサ ミュージアム v1.0</title>
+<title>ガサガサ ミュージアム v1.1</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -100,7 +100,7 @@ button:disabled{opacity:.4}
 .strow{display:block;width:100%;text-align:left;border:none;border-radius:10px;background:#f4eedf;padding:7px 10px;margin-top:5px;font-family:inherit;font-size:13px;color:#3a3225}
 .strow.on{background:#f8d9b8;outline:2px solid #e0954f}
 .strow small{color:#7a6c55}
-.tabs{display:flex;gap:6px;margin-bottom:8px}.tabs button{flex:1;border:none;border-radius:10px;padding:7px;font-family:inherit;font-weight:700;background:#ebe1c9;color:#5a4a33}.tabs button.on{background:#f0a45c;color:#fff}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.tabs button{flex:1 0 64px;border:none;border-radius:10px;padding:7px;font-family:inherit;font-weight:700;background:#ebe1c9;color:#5a4a33}.tabs button.on{background:#f0a45c;color:#fff}
 #musCv{width:100%;height:130px;border-radius:14px;display:block;margin-bottom:8px}
 .voice{background:#fff;border-radius:12px;padding:7px 10px;margin-top:6px;font-size:13px}
 .voice b{color:#8a6a3f;font-size:11px;display:block}
@@ -201,7 +201,7 @@ button:disabled{opacity:.4}
 
   <div class="sheet" id="helpSheet"><div class="panel help">
     <h2><span data-l>ガサガサ ミュージアム</span> <button class="x" data-close>✕</button></h2>
-    <div class="ver">v1.0</div>
+    <div class="ver">v1.1</div>
     <ul>
       <li data-l><b>網を動かす</b>: 網(白い枠)をドラッグ</li>
       <li data-l><b>追い込む</b>: 網の反対側をゆっくりなぞると、生き物が網の方へ逃げる</li>
@@ -227,7 +227,7 @@ button:disabled{opacity:.4}
 'use strict';
 const $=id=>document.getElementById(id);
 const TIMES=['朝','昼','夕方','夜'],TIMES_EN=['Morning','Daytime','Evening','Night'];
-const VAL=[0,5,12,30,80,200,60];
+const VAL=[0,5,12,30,80,200,60];const V=sp=>sp.val||VAL[sp.r];
 const WEIGHT=[0,40,22,9,3,1,0.35];
 const NETS={
  kids:{en:["Kid's Net", "Beginner", "★1–2 creatures never escape the net", "Your first net. Fine for rice fish and shrimp"],name:'子ども用の網',price:0,rx:.17,esc:1,dmg:1,sta:1,sp:'初心',spd:'★1〜2の生き物が網から逃げなくなる',good:'最初の1本。メダカやエビに十分'},
@@ -239,16 +239,35 @@ const NETS={
  ryoshi:{en:["Fisher's Net","Tide Reading","See into the net through octopus ink or murky water","A real fisher's net. Wide and sturdy"],name:'漁師の網',price:180,st:4,rx:.21,esc:.9,dmg:.9,sta:1.05,sp:'潮読み',spd:'タコの墨や泥で濁っても、中がよく見える',good:'本物の漁師の網。口が広くて丈夫'},
  shinchu:{en:["Brass-Rim Net","Collector","Fossils turn up more often","An old collector's net with a brass rim"],name:'真鍮の枠の網',price:200,st:5,rx:.2,esc:.9,dmg:.85,sta:1,sp:'収集家',spd:'化石が出やすくなる',good:'真鍮の枠の、昔の収集家の網'},
  ikai:{en:["Otherworld Net","Star Sight","Hidden creatures are easy to see, even in the dark","A net that came through the door. It can hold the dragon's egg"],name:'異界の網',price:0,st:6,rx:.2,esc:.85,dmg:.8,sta:.9,sp:'星読み',spd:'暗い異界でも、隠れた生き物がよく見える',good:'扉の向こうから届いた網。ドラゴンの卵を受け止められる'},
+ yukari:{en:["Eucalyptus-Handle Net","Dry-Land Wisdom","The drier the billabong, the less stamina you use","A light net with a eucalyptus handle. It smells lovely"],name:'ユーカリの柄の網',price:190,st:7,rx:.2,esc:.9,dmg:.9,sta:.95,sp:'乾いた地の知恵',spd:'ビラボンの水が少ない日ほど、体力が減りにくい',good:'ユーカリの柄の軽い網。いい香りがする'},
+ sisal:{en:["Sisal Net","Stillness","Creatures stay calm even when a shadow passes","A net woven from sisal fiber. Quiet in the water"],name:'サイザルの網',price:200,st:8,rx:.21,esc:.92,dmg:.95,sta:1,sp:'静けさ',spd:'影が通っても、生き物が逃げにくい',good:'サイザルの繊維で編んだ網。水の中で音を立てない'},
+ jute:{en:["Jute Net","Current Reader","On flood days, swept-in creatures rarely escape the net","A sturdy net of jute fiber"],name:'ジュートの網',price:200,st:9,rx:.21,esc:.92,dmg:.95,sta:1,sp:'流れ読み',spd:'増水の日、流されてきた生き物が網から逃げにくい',good:'ジュートの繊維で編んだ丈夫な網'},
  ganjo:{en:["Sturdy Net", "Rock Master", "Hard sweeps over rocks no longer damage it", "Hardly wears out. Heavy, so it tires you more"],name:'頑丈な網',price:150,rx:.18,esc:1,dmg:.5,sta:1.25,sp:'岩場の主',spd:'岩の上を強くなぞっても傷まない',good:'とても傷みにくい。重くて体力を使う'}
 };
 const STG={1:{name:'日本の里山の小川',en:'Japanese Satoyama Stream',x:.88,y:.42},2:{name:'東南アジアの小川',en:'Southeast Asian Stream',x:.7,y:.68},3:{name:'砂漠のオアシス',en:'Desert Oasis',x:.47,y:.5},4:{name:'地中海の海岸',en:'Mediterranean Shore',x:.3,y:.42},6:{name:'異界',en:'The Otherworld',x:.93,y:.86},5:{name:'イギリスの田園の小川',en:'English Countryside Brook',x:.12,y:.2}};
 const UNLOCK2=15,MAXST=5;
+STG[7]={name:'オーストラリアのビラボン',en:'Australian Billabong',x:.74,y:.88};
+STG[8]={name:'マラウイ湖の岩場',en:'Lake Malawi Rocky Shore',x:.42,y:.72};
+STG[9]={name:'インドのモンスーンの川',en:'Indian Monsoon River',x:.6,y:.62};
+const ORDER=[1,2,3,4,5,8,9,7],DN=i=>ORDER.indexOf(i)+1;
 const stN=i=>LANG==='en'?STG[i].en:STG[i].name;
 const FOODS=[{st:1,n:'おにぎり',d:'体力 +40。里山のお弁当。',p:15,v:40,m:'おにぎり、おいしい!'},{st:2,n:'屋台の麺',d:'体力 +50。東南アジアの屋台の味。',p:20,v:50,m:'屋台の麺、おいしい!'},{st:3,n:'ミントティーとデーツ',d:'体力 +50。オアシスの木陰でひと休み。',p:20,v:50,m:'ミントティーでひと休み。'},{st:4,n:'パンとオリーブ',d:'体力 +50。海辺のお昼ごはん。',p:20,v:50,m:'パンとオリーブ、おいしい!'},{st:5,n:'紅茶とスコーン',d:'体力 +50。田園のティータイム。',p:20,v:50,m:'紅茶とスコーンでひと休み。'}];
+FOODS.push({st:7,n:'ダンパーとビリーティー',d:'体力 +50。焚き火で焼いたパンと、缶で沸かした紅茶。',p:20,v:50,m:'ダンパーとビリーティーでひと休み。'});
+FOODS.push({st:9,n:'チャイとサモサ',d:'体力 +50。スパイスの効いたミルクティーと、揚げたての三角パイ。',p:20,v:50,m:'チャイとサモサでひと休み。'});
+FOODS.push({st:8,n:'シマとチャンボ',d:'体力 +50。とうもろこしの練りがゆと、湖の焼き魚。',p:20,v:50,m:'シマとチャンボでひと休み。'});
 const EGG={id:'egg',name:'ドラゴンの卵',kind:'egg',r:6,beh:'egg',size:30,st:6};
 const FRAGS=['uroko','tsume','kiba','tsuno','tsubasa'];
 const MUS=[{name:'水槽と展示棚',en:'Tank & Shelf',mul:1},{name:'小さな資料館',en:'Little Exhibit Hall',cost:400,mul:1.5,desc:'来館者が来るようになる。見物料が1.5倍',den:'Visitors start coming. Viewing fees ×1.5'},{name:'里山の小川博物館',en:'Satoyama Stream Museum',cost:1500,mul:2,desc:'見物料が2倍。愛用の網コーナーもできる',den:'Viewing fees ×2. Adds a Favorite Nets corner'}];
 const VOICES=[
+ ['abeny','子ども','ちっちゃいフグ!かわいい','A teeny pufferfish! So cute!'],['glassfish','子ども','骨が見える!','I can see its bones!'],['mahseer','旅の人','金色の大きな魚…川の王様みたい','A big golden fish… like the king of the river.'],
+ ['gavial','学者','ガビアルは細い口で魚をとります','The gharial catches fish with its thin snout.'],['starruby','旅の人','赤の中に星が光ってる…','A star shining inside the red…'],['dinonest','学者','卵が巣に並んだまま…!とても貴重です','Eggs still lying in their nest…! Extremely rare.'],
+ ['coprolite','子ども','恐竜のうんち!?','Dinosaur poop!?'],['sivatherium','学者','キリンの仲間に、こんな角が…','A giraffe relative with horns like these…'],
+ ['yellowlab','子ども','レモンみたいな魚!','A lemon fish!'],['eblue','子ども','光ってる!電気の魚?','It glows! An electric fish?'],['mouthbrooder','旅の人','お母さんの口の中で育つんですね','The babies grow up in their mother\'s mouth…'],
+ ['denkinamazu','学者','デンキナマズは体で電気を作ります','The electric catfish makes electricity with its body.'],['wanigo','子ども','ワニの赤ちゃん、目がかわいい','The baby crocodile has cute eyes.'],
+ ['diamond','旅の人','これが磨く前のダイヤモンド…','So this is a diamond before polishing…'],['coelascale','学者','シーラカンスのうろこ…!生きた化石の証です','A coelacanth scale…! Proof of a living fossil.'],['malawisaur','学者','マラウィサウルス、この湖の国の恐竜です','Malawisaurus — a dinosaur from this lake country.'],
+ ['rainbow','子ども','虹色の魚だ!','A rainbow fish!'],['kubinaga','子ども','首がながーい!','Such a looong neck!'],['haigyo','学者','肺で息をする魚です。生きた化石ですね','A fish that breathes air. A living fossil.'],
+ ['kamonohashi','旅の人','本物のカモノハシ…!夢みたい','A real platypus…! Like a dream.'],['murraycod','学者','マーレーコッドは川の主と呼ばれます','The Murray cod is called the king of the river.'],
+ ['blackopal','旅の人','黒の中で、虹が踊ってる…','A rainbow dancing in the dark…'],['zebra','子ども','しま馬みたいな石!','A stone like a zebra!'],['opalbone','学者','首長竜がまるごとオパールに…!奇跡です','A whole plesiosaur turned to opal…! A miracle.'],
  ['ebi','子ども','エビがピョンって跳ねた!',"The shrimp just hopped!"],['medaka','おばあちゃん','メダカなんて懐かしいねえ',"Rice fish\u2026 that takes me back."],['dojou','子ども','ドジョウが砂にもぐった!',"The loach dove into the sand!"],
  ['sawagani','子ども','カニさん、横歩きしてる!',"The crab is walking sideways!"],['otama','子ども','カエルになるの、いつかな?',"When will it turn into a frog?"],['imori','学者','お腹の赤がきれいに出ていますね',"What a lovely red belly."],
  ['hotaru','おばあちゃん','昔は田んぼにホタルがたくさんいたのよ',"Rice fields used to be full of fireflies."],['tanago','旅の人','きらきらして、宝石みたいな魚だ',"It sparkles like a jewel."],
@@ -316,6 +335,9 @@ const PARTS=[{k:'handle',n:'柄',d:'素早く上げて、逃げられにくく',
 const UPC=[30,60,100,160,240],FAM_NEED=25,LVMAX=5;
 function newNet(t){return {t,hp:100,fam:0,patch:0,lv:{handle:0,frame:0,mesh:0,grip:0}};}
 const SPEN={"medaka": ["Japanese Rice Fish", "Slow water", "Swims in schools. Herd them well and you can catch several at once."], "ebi": ["Freshwater Shrimp", "Shade under grass", "Flicks backward when you sweep. Set the net where it will land."], "kawanina": ["Pond Snail", "Riverbed stones", "Barely moves. Sweep slowly to reveal it."], "otama": ["Tadpole", "Slow water", "Wiggles along. Easy to herd."], "dojou": ["Pond Loach", "Mud", "Burrows into mud if you sweep hard. Cover the spot with your net and scoop."], "sawagani": ["Freshwater Crab", "Under stones", "Hides under stones. Sweep over the stone and it scuttles out sideways."], "yoshinobori": ["Goby", "Riverbed stones", "Darts short distances along the bottom."], "yago": ["Dragonfly Nymph", "Roots of water plants", "Barely moves. Sweep gently around the plant roots."], "imori": ["Fire-bellied Newt", "Water plants", "Moves slowly. Look for the red belly."], "hotaru": ["Firefly Larva", "Riverbed (evening & night only)", "Found only from evening to night. Its tail glows softly."], "tanago": ["Bitterling", "Slow water", "Shimmering body. Very quick when startled."], "gengoro": ["Diving Beetle", "Water plants", "A very fast swimmer. Read where it will flee. Releasing it greatly enriches the stream."], "tagame": ["Giant Water Bug", "Water plants (evening & night only)", "Lurks in water plants from evening to night. Herd it slowly. Releasing it greatly enriches the stream."], "sekiei": ["Quartz"], "chert": ["Chert"], "kakou": ["Granite"], "menou": ["Agate"], "suisho": ["Rock Crystal"], "sakura": ["Cherry Blossom Stone", null, "Split it open and a cherry blossom pattern appears."], "sakin": ["Gold Flake"], "hisui": ["Jade"], "konoha": ["Leaf Fossil"], "kai": ["Shell Fossil"], "same": ["Shark Tooth"], "ammo": ["Ammonite"], "naumann": ["Naumann's Elephant Tooth"], "uroko": ["Mysterious Scale", null, "Origin unknown. It may come from another world…"], "rasbora": ["Harlequin Rasbora", "Slow water", "Swims in schools. Orange body with a black triangle."], "numaebi": ["Tropical Grass Shrimp", "Shade under grass", "Flicks backward when you sweep. The Bamboo Net catches it easily."], "ishimaki": ["Nerite Snail", "Riverbed stones", "Clings to stones and stays put. Sweep slowly to reveal it."], "gourami": ["Gourami", "Water plants", "Swims lazily. Its thin fins look like feelers."], "kuhli": ["Kuhli Loach", "Mud", "A slender striped loach. Burrows into mud if you sweep hard."], "sumatra": ["Tiger Barb", "Slow water", "A striped, speedy school."], "tobihaze": ["Mudskipper", "Mud", "Hops again and again when startled. Read where it will land."], "yago2": ["Tropical Dragonfly Nymph", "Roots of water plants", "Barely moves. Sweep gently around the plant roots."], "vcrab": ["Vampire Crab", "Under stones", "Purple body, yellow eyes. Sweep over the stone and it scuttles out sideways."], "teppou": ["Archerfish", "Slow water", "When startled, it squirts water at your finger and flees."], "betta": ["Wild Betta", "Water plants", "Fins like a flowing dress. Moves slowly."], "raigyo": ["Snakehead", "Water plants", "A very fast swimmer. Put your net where it will flee."], "ttagame": ["Asian Giant Water Bug", "Water plants (evening & night only)", "A huge water bug lurking in plants from evening to night. Releasing it greatly enriches the stream."], "laterite": ["Laterite"], "sandstone": ["Sandstone"], "limestone": ["Limestone"], "cassit": ["Cassiterite", null, "A black stone that tin is made from."], "zircon": ["Zircon"], "spinel": ["Spinel"], "sapphire": ["Sapphire"], "ruby": ["Ruby"], "keika": ["Petrified Wood", null, "Wood that slowly turned to stone over ages."], "shida": ["Fern Fossil"], "kohaku": ["Amber", null, "Ancient tree resin, hardened. Light shines through it."], "kyoryu": ["Dinosaur Tooth"], "mushikohaku": ["Amber with Insect", null, "An ancient insect, sealed inside just as it was."], "tsume": ["Mysterious Claw", null, "Origin unknown. It may belong to the same creature as the mysterious scale…"], "aphanius": ["Aphanius Pupfish", "Slow water", "The desert's rice fish. Swims in schools."], "houneneb": ["Fairy Shrimp", "Slow water", "Swims belly-up, swaying gently."], "melanoides": ["Trumpet Snail", "Riverbed stones", "A slender snail. Barely moves. Sweep slowly to reveal it."], "otama3": ["Toad Tadpole", "Slow water", "Easy to herd."], "garra": ["Doctor Fish", "Spring", "Instead of fleeing, it swims toward your finger. Sweep near the net to lure it in."], "kabuto": ["Tadpole Shrimp", "Mud", "A living fossil, unchanged since ancient times. Burrows into mud if you sweep hard."], "ocrab": ["Oasis Crab", "Under stones", "Sweep over the stone and it scuttles out sideways."], "yago3": ["Desert Dragonfly Nymph", "Roots of water plants", "Barely moves. Sweep gently around the plant roots."], "mizusumashi": ["Whirligig Beetle", "Water surface", "When startled, it spins in circles as it races away."], "tilapia": ["Tilapia", "Slow water", "Very quick when startled."], "kame": ["Caspian Turtle", "Water plants", "A slow, easygoing turtle."], "sunatokage": ["Sandfish Skink", "Gravel", "A lizard that swims through sand. It keeps moving while buried, so follow the moving sand."], "cavefish": ["Blind Cave Fish", "Spring (night only)", "A white fish that comes up from the underground spring, only at night. Releasing it greatly enriches the stream."], "flint": ["Flint", null, "A firestone. People long ago used it to make fire."], "gypsum": ["Gypsum"], "ganen": ["Rock Salt"], "desertrose": ["Desert Rose", null, "A crystal formed in the sand, with petals like a flower."], "carnelian": ["Carnelian"], "turquoise": ["Turquoise"], "libyan": ["Libyan Desert Glass", null, "Yellow glass made when a meteorite's heat melted the sand."], "meteor": ["Meteorite", null, "An iron stone that fell from the sky."], "nummu": ["Nummulite", null, "A coin-like fossil. Pyramid stones are full of them."], "uni": ["Sea Urchin Fossil"], "kodaigyo": ["Ancient Fish Fossil"], "whalebone": ["Whale Vertebra", null, "Proof that this desert was once a sea."], "whaleskull": ["Ancient Whale Skull", null, "The skull of an ancient whale that still had legs."], "kiba": ["Mysterious Fang", null, "Origin unknown. A scale, a claw, and now a fang… something's shape is coming into view."], "ginpo": ["Blenny", "Rock pools", "Darts short distances between rocks."], "isoebi": ["Rock Pool Shrimp", "Shade of seaweed", "Flicks backward when you sweep."], "tamakibi": ["Periwinkle", "Rocks", "Clings to rocks and stays put. Sweep slowly to reveal it."], "yadokari": ["Hermit Crab", "Sand", "When startled, it pulls into its shell and freezes. Cover it with your net while it hides."], "isogani": ["Shore Crab", "Under rocks", "Sweep over the rock and it scuttles out sideways."], "umiushi": ["Sea Slug", "Seaweed", "A slow, beautifully colored creature."], "hitode": ["Starfish", "Sand", "Barely moves. Sweep slowly to reveal it."], "bora": ["Young Mullet", "Shallows", "A quick-moving school."], "tatsu": ["Seahorse", "Seaweed", "Holds on to seaweed with its tail and won't let go. Put your net near the seaweed."], "murauni": ["Purple Sea Urchin", "Rocks", "Doesn't move, but its spines wear your net a little."], "bera": ["Rainbow Wrasse", "Shallows", "Rainbow-colored body. Very quick when startled."], "tako": ["Octopus", "Near rocks", "Squirts ink to block your view and darts away. The Fisher's Net sees through the murk."], "kogame": ["Loggerhead Hatchling", "Sandy beach (night only)", "Crawls straight toward the sea at night. If you catch one, return it to the sea. The sea grows much richer."], "karuishi": ["Pumice", null, "A stone that floats. It drifts on the waves."], "marble": ["Marble Pebble"], "seaglass": ["Sea Glass", null, "Glass worn smooth and round by the waves."], "obsidian": ["Obsidian", null, "Black volcanic glass from an island."], "jasper": ["Jasper"], "redcoral": ["Red Coral", null, "A treasure of the Mediterranean."], "mosaic": ["Roman Mosaic Tile", null, "A piece of an ancient Roman floor."], "silvercoin": ["Ancient Silver Coin", null, "An ancient Greek silver coin washed ashore from a sunken ship."], "conch": ["Sea Snail Fossil"], "coralfos": ["Coral Fossil"], "umiyuri": ["Crinoid Fossil", null, "An ancient sea creature that looked like a flower."], "megalodon": ["Megalodon Tooth", null, "A tooth from a giant ancient shark."], "dwarfele": ["Dwarf Elephant Skull", null, "From the tiny elephants of Mediterranean islands. Its big central hole may have inspired the legend of the one-eyed giant."], "tsuno": ["Mysterious Horn", null, "Origin unknown. A scale, a claw, a fang, and now a horn… just one more, and something may become clear."], "itoyo": ["Three-spined Stickleback", "Slow water", "A small fish with spines on its back. Males have red throats."], "minnow": ["Minnow", "Slow water", "Small fish that move in schools."], "yokoebi": ["Freshwater Amphipod", "Shade of water plants", "Hops away when you sweep."], "hiramaki": ["Ramshorn Snail", "Riverbed stones", "A flat, coiled snail. Barely moves. Sweep slowly to reveal it."], "stoneloach": ["Stone Loach", "Mud", "A mottled loach. Burrows into mud if you sweep hard."], "kawagera": ["Stonefly Nymph", "Riverbed stones", "An insect that lives only in clean streams. Barely moves."], "bullhead": ["Bullhead", "Riverbed stones", "A big-headed fish that darts along the bottom."], "yatsume": ["Brook Lamprey Larva", "Mud", "A long, slender body. Burrows into mud if you sweep hard."], "zarigani": ["White-clawed Crayfish", "Near stones", "Britain's native crayfish. Flicks backward with its tail when startled."], "kanmuri": ["Great Crested Newt", "Water plants", "A jagged crest along its back. Moves slowly."], "shirasu": ["Glass Eel", "Slow water (evening & night only)", "A see-through baby eel that swam up the river from the sea."], "trout": ["Brown Trout", "Slow water", "A very fast swimmer. Put your net where it will flee."], "pearlmussel": ["Freshwater Pearl Mussel", "Gravel", "A mussel that can live over a hundred years. Sweep slowly to reveal it. Releasing it greatly enriches the stream."], "chalk": ["Chalk", null, "A soft white stone. Where blackboard chalk comes from."], "slate": ["Slate", null, "A stone that splits into thin sheets. Used for roofs."], "honeystone": ["Honey-colored Stone", null, "Used for country cottages and dry-stone walls."], "pyrite": ["Pyrite", null, "It looks like gold, so it's also called fool's gold."], "smoky": ["Smoky Quartz"], "bluejohn": ["Blue John", null, "A fluorite striped in blue and yellow."], "jet": ["Jet", null, "A glossy black gem formed from ancient wood."], "pearl": ["Freshwater Pearl", null, "A pearl grown by a freshwater pearl mussel."], "belem": ["Belemnite", null, "A fossil of a squid relative, shaped like a bullet."], "gryph": ["Devil's Toenail", null, "An old nickname for a curled shell fossil."], "snakestone": ["Snakestone", null, "A legendary stone: an ammonite carved with a snake's head."], "plesio": ["Plesiosaur Tooth"], "ichthy": ["Ichthyosaur Skull", null, "The skull of a dolphin-like reptile from ancient seas."], "tsubasa": ["Mysterious Wing", null, "A scale, a claw, a fang, a horn, and a wing. All five are here… the door deep in the museum seems to be calling."], "hoshikuzu": ["Stardust Minnow", "Night-sky water", "A school of glowing dots."], "kurage": ["Glowing Jellyfish", "Night-sky water", "Drifts gently. Hardly flees."], "tsukiebi": ["Moon Shrimp", "Shade of glowing plants", "Glows pale blue and flicks backward."], "kagenouo": ["Shadow Fish", "Night-sky water", "Usually invisible. Sweep slowly and it appears."], "suzunokai": ["Bell Shell", "Star sand", "Sweep slowly and it rings like a bell."], "kumoimori": ["Cloud Newt", "Glowing plants", "A fluffy body that moves slowly."], "nijiunagi": ["Rainbow Eel", "Night-sky water", "Leaves a rainbow glow behind it. Very fast."], "hoshikujira": ["Star Whale Calf", "Night-sky water", "A whale as small as your palm, with constellations on its body."], "hoshikakera": ["Star Fragment", "Star sand", "Light that spilled from the night sky."], "tsukinoishi": ["Moon Stone", "Star sand"], "yumesuisho": ["Dream Crystal", "Star sand", "Look inside, and something is moving."], "ryuseisuna": ["Shooting Star Sand", "Star sand", "Fine grains of sand that sparkle."], "aurora": ["Aurora Stone", "Star sand", "Its color changes with the angle you look from."], "kumonoishi": ["Cloud Stone", "Star sand", "A soft white, light stone."], "nijishizuku": ["Rainbow Drop", "Star sand", "A teardrop-shaped crystal that shines in rainbow colors."], "ryunonamida": ["Dragon's Tear", "Star sand", "A blue gem said to be a dragon's tear, hardened."]};
+Object.assign(SPEN,{"rainbow": ["Rainbowfish", "Slow water", "Swims in schools. Its body flashes rainbow colors in the light."], "blueeye": ["Pacific Blue-eye", "Slow water", "A tiny fish with glowing blue eyes."], "glassebi": ["Glass Shrimp", "Shade under weeds", "A see-through shrimp. Hops away when you sweep."], "bellotama": ["Bell Frog Tadpole", "Water weeds", "Grows into a gold-and-green frog. Moves slowly."], "gudgeon": ["Purple-spotted Gudgeon", "Mud", "A fish with purple spots. Dives into the mud if you sweep hard."], "spangled": ["Spangled Perch", "Slow water", "A lively fish speckled with red dots."], "matsumo": ["Backswimmer", "Water weeds", "A bug that swims upside down. Darts off quickly."], "longfin": ["Young Longfin Eel", "Mud", "A young eel with long fins. Dives into the mud if you sweep hard."], "yabby": ["Yabby", "Near the rocks", "A bluish crayfish. Flicks backward with its tail when startled."], "kubinaga": ["Baby Long-necked Turtle", "Water weeds", "A baby turtle with a very long neck. Moves slowly."], "haigyo": ["Young Lungfish", "Mud", "A fish that breathes air and has hardly changed since ancient times. It hides quietly."], "murraycod": ["Murray Cod", "Deep water", "Big and very fast. Set the net where it will flee."], "kamonohashi": ["Platypus", "Slow water (morning & evening only)", "A curious animal with a bill. Sweep hard and it dives, popping up somewhere else."], "redsand": ["Red Sandstone", "Riverbed gravel", "A stone from Australia's red earth."], "ochre": ["Ochre", "Riverbed gravel", "An earthy yellow-and-red stone used as paint since ancient times."], "zebra": ["Zebra Stone", "Riverbed gravel", "Striped like a zebra. Found only in this land."], "chryso": ["Chrysoprase", "Riverbed gravel", "A bright apple-green stone."], "mookaite": ["Mookaite", "Riverbed gravel", "A local jasper swirled with red, yellow and purple."], "goldgrain": ["Gold Grain", "Riverbed gravel", "A grain of gold glinting on the riverbed."], "boulderopal": ["Boulder Opal", "Riverbed gravel", "Rainbow colors running through brown rock."], "blackopal": ["Black Opal", "Riverbed gravel", "Rainbow colors shimmering on black. The most precious opal."], "stroma": ["Stromatolite", "Riverbed gravel", "Layers built by tiny life that first made oxygen on Earth."], "glosso": ["Glossopteris Leaf", "Riverbed gravel", "A tongue-shaped leaf from an ancient supercontinent."], "opalshell": ["Opal Shell", "Riverbed gravel", "A fossil shell whose inside turned to opal."], "diproto": ["Diprotodon Tooth", "Riverbed gravel", "A front tooth from a giant wombat relative as big as a hippo."], "meiolania": ["Meiolania Shell", "Riverbed gravel", "A piece of shell from a huge ancient turtle with horns on its head."], "opalbone": ["Opalized Plesiosaur", "Riverbed gravel", "A plesiosaur whose bones all turned to opal. The greatest treasure of your journey."]});
+Object.assign(SPEN,{"zebradanio": ["Zebra Danio", "Slow water", "A tiny striped fish that swims in schools."], "rosybarb": ["Rosy Barb", "Slow water", "A fish that glows rosy pink."], "glassfish": ["Glassfish", "Shade under weeds", "A fish so clear you can see its bones."], "amenbo": ["Water Strider", "Water weeds", "A bug that skates across the surface."], "abeny": ["Dwarf Pufferfish", "Water weeds", "A tiny pufferfish. Sweep hard and it puffs up into a ball and stops."], "giantdanio": ["Giant Danio", "Slow water", "A larger danio that swims in schools."], "tenaga": ["Long-armed Prawn", "Near the rocks", "A prawn with long claws. Flicks backward when startled."], "ushigaeru": ["Indian Bullfrog", "Water weeds", "A big frog that turns yellow in the rainy season."], "denison": ["Denison Barb", "Slow water", "A beautiful fish with a red stripe. A fast swimmer."], "togeunagi": ["Spiny Eel", "Mud", "A long fish with a pointed snout. Dives into the mud if you sweep hard."], "hakosuppon": ["Baby Flapshell Turtle", "Mud", "A turtle whose shell has flaps. Moves slowly."], "mahseer": ["Mahseer", "Deep water", "A big golden fish. Very fast."], "gavial": ["Baby Gharial", "Mud (flood days only)", "A baby crocodile with a long, thin snout. It hides quietly."], "basalt": ["Basalt", "Riverbed gravel", "The black stone of the Deccan Plateau."], "zeolite": ["Zeolite", "Riverbed gravel", "White needle-like crystals that grow inside basalt pockets."], "soapstone": ["Soapstone", "Riverbed gravel", "A smooth, soft stone that is easy to carve."], "moonstone": ["Moonstone", "Riverbed gravel", "A bluish glow floats in it like moonlight."], "bloodstone": ["Bloodstone", "Riverbed gravel", "Deep green with scattered red dots."], "apophyllite": ["Apophyllite", "Riverbed gravel", "Clear square crystals that grow in Deccan pockets."], "catseye": ["Cat's Eye", "Riverbed gravel", "A gem with a single line of light, like a cat's eye."], "starruby": ["Star Ruby", "Riverbed gravel", "A red gem with a six-rayed star of light inside."], "coprolite": ["Coprolite", "Riverbed gravel", "Dinosaur dung turned to stone."], "palmleaf": ["Fossil Palm Leaf", "Riverbed gravel", "A palm leaf from an ancient warm land."], "pakicetus": ["Pakicetus Tooth", "Riverbed gravel", "A tooth from a walking ancestor of whales."], "sivatherium": ["Sivatherium Horn", "Riverbed gravel", "A giraffe relative that had moose-like horns."], "rajasaur": ["Rajasaurus Horn", "Riverbed gravel", "A horned meat-eating dinosaur whose name means 'king lizard'."], "dinonest": ["Dinosaur Egg Nest", "Riverbed gravel", "A clutch of round eggs turned to stone just as they lay. A treasure of your journey."]});
+Object.assign(SPEN,{"utaka": ["Utaka", "Slow water", "A blue fish that swims in schools."], "yellowlab": ["Yellow Lab", "Near the rocks", "A lemon-yellow cichlid with black-edged fins."], "zebracichlid": ["Zebra Cichlid", "Near the rocks", "A cichlid striped blue and black."], "malawisnail": ["Malawi Trumpet Snail", "Gravel", "A pointed snail. Barely moves."], "synodontis": ["Synodontis", "Near the rocks", "A long-whiskered catfish that swims upside down."], "demasoni": ["Demasoni", "Near the rocks", "A small blue-striped fish. Darts off quickly."], "potamon": ["Potamonautes Crab", "Under rocks", "A lake crab. Scuttles away sideways."], "tsumegaeru": ["African Clawed Frog", "Water weeds", "A frog that lives its whole life in water. Black claws on its back feet."], "eblue": ["Electric Blue", "Near the rocks", "Glows blue like electricity. A fast swimmer."], "mouthbrooder": ["Mouthbrooding Cichlid", "Slow water", "A mother fish who guards her babies in her mouth. In the net, little fry drift out."], "wanigo": ["Baby Nile Crocodile", "Mud", "Hides quietly with only its eyes showing."], "tigerfish": ["Tigerfish", "Deep water", "A fish with sharp teeth. Very fast."], "denkinamazu": ["Electric Catfish", "Mud", "Sweep hard nearby and — zap! Creatures around it freeze for a moment."], "granite": ["Granite", "Riverbed gravel", "A salt-and-pepper stone that forms the lake's rocky shore."], "mica": ["Mica", "Riverbed gravel", "A sparkly stone that peels into thin sheets."], "gneiss": ["Gneiss", "Riverbed gravel", "A stone with wavy stripes."], "malachite": ["Malachite", "Riverbed gravel", "Green-striped. Once used as paint."], "tigereye": ["Tiger's Eye", "Riverbed gravel", "A band of light moves across it like a tiger's eye."], "amethyst": ["Amethyst", "Riverbed gravel", "Purple quartz."], "tanzanite": ["Tanzanite", "Riverbed gravel", "A violet-blue gem found in only one place in Africa."], "diamond": ["Rough Diamond", "Riverbed gravel", "A diamond before polishing, with a rounded shape."], "ashiato": ["Dinosaur Footprint", "Riverbed gravel", "A footprint left by a dinosaur walking an ancient shore."], "cichlidfos": ["Ancient Cichlid Fossil", "Riverbed gravel", "A lake fish preserved in a slab of stone."], "trilobite": ["Trilobite", "Riverbed gravel", "An ancient sea creature often found in Africa's deserts."], "malawisaur": ["Malawisaurus Tooth", "Riverbed gravel", "A tooth from a long-necked dinosaur named after this country."], "spinotooth": ["Spinosaurus Tooth", "Riverbed gravel", "A tooth from a huge dinosaur that caught fish at the water's edge."], "coelascale": ["Coelacanth Scale", "Riverbed gravel", "A big scale from a fish unchanged since the age of dinosaurs. A treasure of your journey."]});
 const ITEM_HINT_EN='Sweep fast to stir up the mud and it rises from the gravel. Let the current carry it into your net.';
 const ITEM_HINT4='速くなぞって砂を舞わせると出てくる。波に乗って行ったり来たりしながら網へ。';
 const ITEM_HINT='速くなぞって泥を舞わせると、砂利から出てくる。流れに乗って網へ。';
@@ -456,6 +478,87 @@ const SPECIES=[
  {id:'plesio',st:5,name:'プレシオサウルスの歯',kind:'fossil',r:4,pat:'plesio'},
  {id:'ichthy',st:5,name:'魚竜の頭骨',kind:'fossil',r:5,pat:'ichthy',hint:'大昔の海にいた、イルカのような爬虫類の頭。'},
  {id:'tsubasa',st:5,name:'謎の翼',kind:'fossil',r:6,pat:'wing',hint:'鱗、爪、牙、角、そして翼。5つがそろった…。博物館の奥の扉が、呼んでいる気がする。'},
+ {id:'rainbow',st:7,name:'レインボーフィッシュ',kind:'life',r:1,hab:'pool',beh:'school',size:14,where:'流れの緩い所',hint:'群れで動く。光が当たると体が虹色に見える。'},
+ {id:'blueeye',st:7,name:'ブルーアイ',kind:'life',r:1,hab:'pool',beh:'school',size:11,where:'流れの緩い所',hint:'目が青く光る、小さな魚。'},
+ {id:'glassebi',st:7,name:'グラスシュリンプ',kind:'life',r:1,hab:'weed',beh:'jump',size:12,where:'水草の陰',hint:'透き通った体のエビ。なぞると跳ねて逃げる。'},
+ {id:'bellotama',st:7,name:'ベルガエルのオタマジャクシ',kind:'life',r:1,hab:'weed',beh:'slow',size:15,where:'水草',hint:'金色と緑のカエルになるオタマジャクシ。のんびり動く。'},
+ {id:'gudgeon',st:7,name:'パープルスポッテッドガジョン',kind:'life',r:2,hab:'mud',beh:'burrow',size:16,where:'泥',hint:'紫の斑点がある魚。強くなぞると泥にもぐる。'},
+ {id:'spangled',st:7,name:'スパングルドパーチ',kind:'life',r:2,hab:'pool',beh:'normal',size:18,where:'流れの緩い所',hint:'赤い点が散らばった、元気な魚。'},
+ {id:'matsumo',st:7,name:'マツモムシ',kind:'life',r:2,hab:'weed',beh:'dart',size:12,where:'水草',hint:'あお向けで泳ぐ虫。ピッと素早く走る。'},
+ {id:'longfin',st:7,name:'ロングフィンイールの子',kind:'life',r:2,hab:'mud',beh:'burrow',size:22,where:'泥',hint:'ひれの長いウナギの子。強くなぞると泥にもぐる。'},
+ {id:'yabby',st:7,name:'ヤビー',kind:'life',r:3,hab:'rock',beh:'jump',size:18,where:'石の近く',hint:'青みがかったザリガニ。驚くとしっぽで後ろへ跳ねる。'},
+ {id:'kubinaga',st:7,name:'クビナガガメの子',kind:'life',r:3,hab:'weed',beh:'slow',size:20,where:'水草',hint:'首がとても長いカメの子。のんびり動く。'},
+ {id:'haigyo',st:7,name:'ハイギョの子',kind:'life',r:3,hab:'mud',beh:'lurk',size:22,where:'泥',hint:'肺で息ができる、大昔から姿が変わらない魚。じっと隠れている。'},
+ {id:'murraycod',st:7,name:'マーレーコッド',kind:'life',r:4,hab:'pool',beh:'fast',size:26,where:'深い所',hint:'大きくて泳ぎがとても速い。逃げる先に網を置こう。'},
+ {id:'kamonohashi',st:7,name:'カモノハシ',kind:'life',r:5,hab:'pool',beh:'dive',size:24,where:'流れの緩い所(朝と夕方だけ)',time:[0,2],bonus:12,hint:'くちばしのある不思議な動物。強くなぞるともぐって、別の場所から顔を出す。'},
+ {id:'redsand',st:7,name:'赤い砂岩',kind:'stone',r:1,col:'#c4623c',pat:'layer',hint:'オーストラリアの赤い大地の石。'},
+ {id:'ochre',st:7,name:'オーカー',kind:'stone',r:1,col:'#c98a3a',pat:'laterite',hint:'大昔から絵の具に使われてきた、黄色や赤の土の石。'},
+ {id:'zebra',st:7,name:'ゼブラストーン',kind:'stone',r:1,col:'#eadbc2',pat:'zebra',hint:'しま馬のような模様。この土地だけの石。'},
+ {id:'chryso',st:7,name:'クリソプレーズ',kind:'stone',r:2,col:'#7fcf95',pat:'jade',hint:'りんごのような明るい緑の石。'},
+ {id:'mookaite',st:7,name:'ムーカイト',kind:'stone',r:2,col:'#b4505e',pat:'mookaite',hint:'赤・黄・紫がまざる、この土地の碧玉。'},
+ {id:'goldgrain',st:7,name:'砂金',kind:'stone',r:3,col:'#d9b33a',pat:'gold',hint:'川底できらりと光る金の粒。'},
+ {id:'boulderopal',st:7,name:'ボルダーオパール',kind:'stone',r:4,col:'#7a5232',pat:'opal',hint:'茶色い石の中に、虹色が走るオパール。'},
+ {id:'blackopal',st:7,name:'ブラックオパール',kind:'stone',r:5,col:'#1b1e2c',pat:'opal',hint:'黒い地に虹色がゆらめく、いちばん貴重なオパール。'},
+ {id:'stroma',st:7,name:'ストロマトライト',kind:'fossil',r:2,pat:'strom',hint:'地球にはじめて酸素を作った、小さな生き物の積み重なり。'},
+ {id:'glosso',st:7,name:'グロッソプテリスの葉',kind:'fossil',r:2,pat:'glosso',hint:'大昔の大陸でしげった、舌の形の葉。'},
+ {id:'opalshell',st:7,name:'オパールの貝',kind:'fossil',r:3,pat:'opalshell',hint:'中身がオパールに変わった貝の化石。'},
+ {id:'diproto',st:7,name:'ディプロトドンの歯',kind:'fossil',r:4,pat:'diproto',hint:'カバほどもある、大きなウォンバットの仲間の前歯。'},
+ {id:'meiolania',st:7,name:'メイオラニアの甲羅',kind:'fossil',r:5,pat:'turtle',hint:'頭に角のある、大昔の大きなカメの甲羅のかけら。'},
+ {id:'opalbone',st:7,name:'オパールの首長竜',kind:'fossil',r:6,val:300,pat:'opalbone',hint:'骨がまるごとオパールになった首長竜。旅のいちばんの宝。'},
+ {id:'utaka',st:8,name:'ウタカ',kind:'life',r:1,hab:'pool',beh:'school',size:14,where:'流れの緩い所',hint:'群れで動く青い魚。'},
+ {id:'yellowlab',st:8,name:'イエローラブ',kind:'life',r:1,hab:'rock',beh:'normal',size:14,where:'岩の近く',hint:'レモン色のシクリッド。ひれのふちが黒い。'},
+ {id:'zebracichlid',st:8,name:'ゼブラシクリッド',kind:'life',r:1,hab:'rock',beh:'normal',size:15,where:'岩の近く',hint:'青と黒のしま模様のシクリッド。'},
+ {id:'malawisnail',st:8,name:'メラノイデスの仲間',kind:'life',r:1,hab:'gravel',beh:'still',size:11,where:'砂利',hint:'とがった巻貝。ほとんど動かない。'},
+ {id:'synodontis',st:8,name:'シノドンティス',kind:'life',r:2,hab:'rock',beh:'normal',size:17,where:'岩の近く',hint:'あお向けで泳ぐ、ひげの長いナマズ。'},
+ {id:'demasoni',st:8,name:'デメンソーニ',kind:'life',r:2,hab:'rock',beh:'dart',size:13,where:'岩の近く',hint:'青いしまの小さな魚。ピッと素早く走る。'},
+ {id:'potamon',st:8,name:'ポタモナウテス',kind:'life',r:2,hab:'rock',beh:'crab',size:16,where:'石の下',hint:'湖に住むカニ。横歩きで逃げる。'},
+ {id:'tsumegaeru',st:8,name:'アフリカツメガエル',kind:'life',r:2,hab:'weed',beh:'slow',size:16,where:'水草',hint:'一生を水の中で暮らすカエル。後ろ足に黒いツメがある。'},
+ {id:'eblue',st:8,name:'エレクトリックブルー',kind:'life',r:3,hab:'rock',beh:'fast',size:17,where:'岩の近く',hint:'電気のように青く光る魚。泳ぎが速い。'},
+ {id:'mouthbrooder',st:8,name:'子守りシクリッド',kind:'life',r:3,hab:'pool',beh:'normal',size:18,where:'流れの緩い所',hint:'口の中で子どもを守るお母さん魚。網に入ると稚魚がふわっと出てくる。'},
+ {id:'wanigo',st:8,name:'ナイルワニの子',kind:'life',r:3,hab:'mud',beh:'lurk',size:24,where:'泥',hint:'目だけ出して、じっと隠れている。'},
+ {id:'tigerfish',st:8,name:'タイガーフィッシュ',kind:'life',r:4,hab:'pool',beh:'fast',size:26,where:'深い所',hint:'鋭い歯を持つ魚。泳ぎがとても速い。'},
+ {id:'denkinamazu',st:8,name:'デンキナマズ',kind:'life',r:5,hab:'mud',beh:'shock',size:24,where:'泥',hint:'近くを強くなぞるとビリッ!まわりの生き物が一瞬しびれて止まる。'},
+ {id:'granite',st:8,name:'花崗岩',kind:'stone',r:1,col:'#c9c2b8',pat:'speck',hint:'湖の岩場をつくる、ごま塩模様の石。'},
+ {id:'mica',st:8,name:'雲母',kind:'stone',r:1,col:'#b9a77e',pat:'mica',hint:'薄くはがれる、きらきらの石。'},
+ {id:'gneiss',st:8,name:'片麻岩',kind:'stone',r:1,col:'#8f8a84',pat:'band',hint:'波のようなしま模様の石。'},
+ {id:'malachite',st:8,name:'マラカイト',kind:'stone',r:2,col:'#2f9a6a',pat:'malachite',hint:'緑のしま模様。昔は絵の具に使われた。'},
+ {id:'tigereye',st:8,name:'タイガーアイ',kind:'stone',r:2,col:'#9a6a2a',pat:'tigereye',hint:'虎の目のように、光の帯が動く石。'},
+ {id:'amethyst',st:8,name:'アメジスト',kind:'stone',r:3,col:'rgba(160,100,210,.88)',pat:'crystal',hint:'紫の水晶。'},
+ {id:'tanzanite',st:8,name:'タンザナイト',kind:'stone',r:4,col:'rgba(90,90,220,.9)',pat:'crystal',hint:'アフリカの一か所でしか採れない、青紫の宝石。'},
+ {id:'diamond',st:8,name:'ダイヤモンドの原石',kind:'stone',r:5,col:'rgba(235,242,250,.92)',pat:'octa',hint:'磨く前のダイヤモンド。ころんとした形。'},
+ {id:'ashiato',st:8,name:'恐竜の足あと',kind:'fossil',r:2,pat:'foot',hint:'大昔の水辺を歩いた恐竜の足あと。'},
+ {id:'cichlidfos',st:8,name:'古代のシクリッドの化石',kind:'fossil',r:2,pat:'fishfos',hint:'湖の底にいた魚が、板のような石に残ったもの。'},
+ {id:'trilobite',st:8,name:'三葉虫',kind:'fossil',r:3,pat:'trilo',hint:'アフリカの砂漠でよく見つかる、大昔の海の生き物。'},
+ {id:'malawisaur',st:8,name:'マラウィサウルスの歯',kind:'fossil',r:4,pat:'tooth',hint:'この国の名前がついた、首の長い恐竜の歯。'},
+ {id:'spinotooth',st:8,name:'スピノサウルスの歯',kind:'fossil',r:5,pat:'spino',hint:'水辺で魚を食べていた、大きな恐竜の歯。'},
+ {id:'coelascale',st:8,name:'シーラカンスのうろこ',kind:'fossil',r:6,val:300,pat:'coela',hint:'恐竜の時代から姿を変えずに生きる魚の、大きなうろこ。旅の宝。'},
+ {id:'zebradanio',st:9,name:'ゼブラダニオ',kind:'life',r:1,hab:'pool',beh:'school',size:11,where:'流れの緩い所',hint:'しま模様の小さな魚。群れで動く。'},
+ {id:'rosybarb',st:9,name:'ローズバルブ',kind:'life',r:1,hab:'pool',beh:'normal',size:13,where:'流れの緩い所',hint:'バラ色に光る魚。'},
+ {id:'glassfish',st:9,name:'グラスフィッシュ',kind:'life',r:1,hab:'weed',beh:'normal',size:12,where:'水草の陰',hint:'骨まで透けて見える魚。'},
+ {id:'amenbo',st:9,name:'アメンボ',kind:'life',r:1,hab:'weed',beh:'dart',size:12,where:'水草',hint:'水面をスイスイ走る虫。'},
+ {id:'abeny',st:9,name:'アベニーパファー',kind:'life',r:2,hab:'weed',beh:'puff',size:10,where:'水草',hint:'小さなフグ。強くなぞるとまん丸にふくらんで止まる。'},
+ {id:'giantdanio',st:9,name:'ジャイアントダニオ',kind:'life',r:2,hab:'pool',beh:'school',size:16,where:'流れの緩い所',hint:'群れで動く、大きめのダニオ。'},
+ {id:'tenaga',st:9,name:'テナガエビ',kind:'life',r:2,hab:'rock',beh:'jump',size:17,where:'石の近く',hint:'長いハサミのエビ。驚くと後ろへ跳ねる。'},
+ {id:'ushigaeru',st:9,name:'インドウシガエル',kind:'life',r:2,hab:'weed',beh:'slow',size:19,where:'水草',hint:'雨の季節には黄色くなる大きなカエル。'},
+ {id:'denison',st:9,name:'デニソンバルブ',kind:'life',r:3,hab:'pool',beh:'fast',size:17,where:'流れの緩い所',hint:'赤い線が入った美しい魚。泳ぎが速い。'},
+ {id:'togeunagi',st:9,name:'トゲウナギ',kind:'life',r:3,hab:'mud',beh:'burrow',size:22,where:'泥',hint:'とがった口先の細長い魚。強くなぞるともぐる。'},
+ {id:'hakosuppon',st:9,name:'インドハコスッポンの子',kind:'life',r:3,hab:'mud',beh:'slow',size:20,where:'泥',hint:'甲羅にふたがあるカメ。のんびり動く。'},
+ {id:'mahseer',st:9,name:'マハシール',kind:'life',r:4,hab:'pool',beh:'fast',size:27,where:'深い所',hint:'金色の大きな魚。泳ぎがとても速い。'},
+ {id:'gavial',st:9,name:'ガビアルの子',kind:'life',r:5,hab:'mud',beh:'lurk',size:26,flood:true,where:'泥(増水の日だけ)',hint:'細長い口のワニの子。じっと隠れている。'},
+ {id:'basalt',st:9,name:'玄武岩',kind:'stone',r:1,col:'#4a4a4e',pat:'speck',hint:'デカン高原をつくる黒い石。'},
+ {id:'zeolite',st:9,name:'ゼオライト',kind:'stone',r:1,col:'#d8d4cc',pat:'needle',hint:'玄武岩の穴の中に育つ、白い針のような結晶。'},
+ {id:'soapstone',st:9,name:'ソープストーン',kind:'stone',r:1,col:'#a8b49a',pat:'soap',hint:'やわらかくて彫りやすい、すべすべの石。'},
+ {id:'moonstone',st:9,name:'ムーンストーン',kind:'stone',r:2,col:'rgba(225,228,236,.92)',pat:'moonglow',hint:'月の光のように、青白く光が浮かぶ石。'},
+ {id:'bloodstone',st:9,name:'ブラッドストーン',kind:'stone',r:2,col:'#2f5a44',pat:'blood',hint:'深い緑に赤い点が散らばる石。'},
+ {id:'apophyllite',st:9,name:'アポフィライト',kind:'stone',r:3,col:'rgba(225,245,240,.85)',pat:'crystal',hint:'デカンの穴に育つ、透き通った四角い結晶。'},
+ {id:'catseye',st:9,name:'キャッツアイ',kind:'stone',r:4,col:'#b8a24a',pat:'catseye',hint:'猫の目のように、光の筋が一本走る宝石。'},
+ {id:'starruby',st:9,name:'スタールビー',kind:'stone',r:5,col:'#b0283c',pat:'starruby',hint:'赤い宝石の中に、六本の光の星が浮かぶ。'},
+ {id:'coprolite',st:9,name:'コプロライト',kind:'fossil',r:2,pat:'copro',hint:'恐竜のフンが石になったもの。'},
+ {id:'palmleaf',st:9,name:'ヤシの葉の化石',kind:'fossil',r:2,pat:'palm',hint:'大昔の暖かい土地でしげったヤシの葉。'},
+ {id:'pakicetus',st:9,name:'パキケトゥスの歯',kind:'fossil',r:3,pat:'paki',hint:'陸を歩いていた、クジラのご先祖の歯。'},
+ {id:'sivatherium',st:9,name:'シヴァテリウムの角',kind:'fossil',r:4,pat:'siva',hint:'キリンの仲間なのに、ヘラジカのような角を持っていた動物。'},
+ {id:'rajasaur',st:9,name:'ラジャサウルスの角',kind:'fossil',r:5,pat:'raja',hint:'「王様のトカゲ」という名の、角のある肉食恐竜。'},
+ {id:'dinonest',st:9,name:'恐竜の卵の巣',kind:'fossil',r:6,val:300,pat:'nest',hint:'丸い卵がいくつも並んだまま石になったもの。旅の宝。'},
  {id:'hoshikuzu',st:6,name:'星くずの小魚',kind:'life',r:1,hab:'pool',beh:'school',size:12,glow:'#bfe8ff',where:'夜空の水',hint:'光る点の群れ。群れで動く。'},
  {id:'kurage',st:6,name:'光るクラゲ',kind:'life',r:1,hab:'pool',beh:'slow',size:16,glow:'#f0b8ff',where:'夜空の水',hint:'ゆらゆら漂う。ほとんど逃げない。'},
  {id:'tsukiebi',st:6,name:'月のエビ',kind:'life',r:2,hab:'weed',beh:'jump',size:14,glow:'#d8e8ff',where:'光る水草の陰',hint:'青白く光り、後ろへ跳ねる。'},
@@ -490,7 +593,16 @@ const SETS=[
  {en:'Treasures of Ancient Rome',name:'古代ローマの宝物',need:['mosaic','silvercoin'],bonus:150},
  {en:'Jurassic Sea',name:'ジュラ紀の海',need:['snakestone','plesio','ichthy'],bonus:150},
  {en:'Stones of Britain',name:'英国の石',need:['smoky','bluejohn','jet'],bonus:90},
- {en:'A Tale of Pearls',name:'真珠の物語',need:['pearlmussel','pearl'],bonus:200}
+ {en:'A Tale of Pearls',name:'真珠の物語',need:['pearlmussel','pearl'],bonus:200},
+ {en:'Land of Opals',name:'オパールの国',need:['boulderopal','blackopal','opalshell'],bonus:180},
+ {en:'Billabong Friends',name:'ビラボンの仲間',need:['yabby','kubinaga','haigyo'],bonus:70},
+ {en:'Ancient Continent',name:'太古の大陸',need:['stroma','glosso','diproto'],bonus:110},
+ {en:'Jewels of the Lake',name:'湖の宝石たち',need:['yellowlab','demasoni','eblue'],bonus:70},
+ {en:'African Gems',name:'アフリカの宝石',need:['malachite','tanzanite','diamond'],bonus:220},
+ {en:'Continent of Dinosaurs',name:'恐竜の大陸',need:['malawisaur','spinotooth','trilobite'],bonus:150},
+ {en:'Stones of the Deccan',name:'デカンの石',need:['basalt','zeolite','apophyllite'],bonus:60},
+ {en:'Gems of India',name:'インドの宝石',need:['moonstone','catseye','starruby'],bonus:220},
+ {en:'Land of Dinosaurs',name:'恐竜の国',need:['coprolite','rajasaur','dinonest'],bonus:200}
 ];
 
 /* ---------- save ---------- */
@@ -524,6 +636,9 @@ function closest(px,py,x0,y0,x1,y1){const dx=x1-x0,dy=y1-y0,l=dx*dx+dy*dy;let t=
 function segDist(px,py,x0,y0,x1,y1){const c=closest(px,py,x0,y0,x1,y1);return Math.hypot(px-c.x,py-c.y);}
 const stars=r=>r===6?'★?':'★'.repeat(r);
 const EN={"<b>博物館</b>: ポイントを貯めて、水槽と展示棚から「小さな資料館」「博物館」へ建て替えよう。来館者が増えて、見物料も上がるよ": "<b>Museum</b>: Save points to grow your tank and shelf into a Little Exhibit Hall, then a Museum. More visitors, higher viewing fees", "<b>泥を舞わせる</b>: 速くなぞると泥が舞って、砂利から石や化石が出てくる。流れて網に入るよ。ただし生き物は散る": "<b>Stir the mud</b>: Sweep fast to stir up mud. Stones and fossils rise from the gravel and drift into your net. But creatures scatter", "<b>網</b>: お店で新しい網を買える。網は2本まで持っていけて、川の左下のボタンで持ち替える。使い込むと特技が開く。「網」画面で部分ごとに強化できるよ": "<b>Nets</b>: Buy new nets at the shop. Carry up to 2 and switch with the button at the bottom left of the stream. Use a net a lot to unlock its skill. Upgrade each part on the Nets screen", "<b>網を上げる</b>: 網の中にいるものを引き上げる": "<b>Lift Net</b>: Pull up everything inside the net", "<b>網を動かす</b>: 網(白い枠)をドラッグ": "<b>Move the net</b>: Drag the net (white frame)", "<b>追い込む</b>: 網の反対側をゆっくりなぞると、生き物が網の方へ逃げる": "<b>Herd</b>: Sweep slowly on the far side of the net and creatures flee toward it", "{0}pt に換えた": "Traded for {0}pt", "{0}に持ち替えた": "Switched to {0}", "{0}の{1}を強化した": "Upgraded the {1} of your {0}", "{0}の特技「{1}」が開いた!": "{0} unlocked its skill: {1}!", "{0}の見物料": "{0} viewing fees", "{0}を川に返した(豊かさ+{1})": "Released the {0} (richness +{1})", "{0}を買った!「網」画面で持ち替えられるよ": "Bought the {0}! Switch nets on the Nets screen", "{0}匹、網から逃げた!": "{0} got away from the net!", "{0}日目 {1}": "Day {0} {1}", "{0}日目 {1}の里山の小川": "Day {0}: the satoyama stream, {1}", "「{0}」ができた!": "The {0} is complete!", "「{0}」を建てる": "Build the {0}", "あと{0}つ決めよう": "Decide {0} more", "いいね!速くなぞると泥が舞って、砂利から石や化石が出てくるよ。いろいろ試してみて": "Nice! Sweep fast to stir up mud and bring stones and fossils out of the gravel. Try all sorts of things", "おにぎり": "Rice Ball", "おにぎり、おいしい!": "Yum, rice ball!", "おばあちゃん": "Grandma", "お店": "Shop", "からっぽ…網の反対側から、網に向かってなぞってみよう": "Empty… Try sweeping from the far side toward the net", "これを使う": "Use this", "なじみ度 {0}/{1}": "Familiarity {0}/{1}", "はじめる": "Start", "へとへと…今日はここまで。": "Worn out… That's it for today.", "まだ空っぽ。捕った生き物を入れてみよう。": "Still empty. Put in something you caught.", "まだ見つけていない。": "Not found yet.", "もう一度。網の反対側から、網に向かってゆっくりなぞってみて": "Once more. Sweep slowly from the far side toward the net", "もう一度押すと消えます": "Press again to erase", "ガサガサ ミュージアム": "Gasagasa Museum", "スキップ": "Skip", "セット「{0}」": "Set: {0}", "セット展示": "Display Sets", "チュートリアルをもう一度": "Replay tutorial", "データを最初からにする": "Reset all data", "・繕いの跡 {0}": " · Patches {0}", "今日のガサガサはここまで。": "That's it for today's gasagasa.", "今日の来館者 <b>{0}人</b>": "Visitors today: <b>{0}</b>", "体力": "Stamina", "体力 +40。里山のお弁当。": "Stamina +40. A satoyama packed lunch.", "体力が {0} 回復した(今 {1}%)。": "Recovered {0} stamina (now {1}%). ", "体力はなぞった分だけ減る。網は石を捕ったり、岩の上を強くなぞると傷む": "Sweeping uses stamina. Nets wear out when you catch stones or sweep hard over rocks", "何かが下流へ流れていった…": "Something drifted away downstream…", "何かが網から逃げた!": "Something got away from the net!", "使用中": "In use", "修理 {0}pt": "Repair {0}pt", "修理(傷みなし)": "Repair (no wear)", "入った!": "Got in!", "入った!「網を上げる」を押そう": "It's in! Press Lift Net", "出る場所: {0}": "Found in: {0}", "化石": "Fossils", "博物館": "Museum", "博物館の準備": "Museum supplies", "図鑑": "Field Guide", "図鑑 {0}/{1}": "Field Guide {0}/{1}", "夕方と夜にしか出会えない生き物もいるらしい。": "Some creatures only appear in the evening and at night.", "奥に「？？？の特別室」がある。まだ扉は開かない…": "In the back is a room marked \"??? Special Room\". The door won't open yet…", "子ども": "Child", "学者": "Scholar", "小川へ出かける": "Head to the stream", "展示すると、帰るたびに見物料が入るよ。": "Put things on display to earn viewing fees each time you come home.", "展示棚 {0} → {1}個": "Shelf {0} → {1} items", "展示棚 {0}/{1}": "Shelf {0}/{1}", "展示棚が広くなった": "The shelf got bigger", "展示棚に並べた": "Placed on the shelf", "展示棚へ": "To shelf", "展示棚を広げる": "Expand shelf", "川に返した(+{0}pt・豊かさ+{1})": "Released (+{0}pt, richness +{1})", "川に返す": "Release", "川の豊かさ {0}": "Stream richness {0}", "川へ戻る": "Back to the stream", "帰る": "Go home", "帰るたびの見物料: <b>{0}pt</b>": "Viewing fees per trip home: <b>{0}pt</b>", "帰宅": "Home", "強化 {0}pt": "Upgrade {0}pt", "愛用の網コーナー": "Favorite Nets corner", "手がかり: {0}": "Clue: {0}", "持っていく": "Carry", "持っている": "Owned", "持っているポイント: <b>{0}pt</b>": "Your points: <b>{0}pt</b>", "持っているポイント: <b>{0}pt</b>・持っていける網は2本まで": "Your points: <b>{0}pt</b> · You can carry up to 2 nets", "捕ったものは「展示する」「ポイントに換える」「川に返す」から選ぶ。どれでも図鑑には載る": "For each catch, choose: display it, trade it for points, or release it. Every choice adds it to your field guide", "捕ったものは「水槽へ(展示)」「換える(ポイント)」「川に返す」から選べるよ。どれを選んでも図鑑には載る。": "For each catch, choose To tank (display), Trade (points), or Release. Whichever you pick, it goes in your field guide.", "捕った数: {0} ・ 換えると {1}pt": "Caught: {0} · Trades for {1}pt", "換える +{0}": "Trade +{0}", "換える +{0}pt": "Trade +{0}pt", "新しい網はお店で買えるよ。網は使った回数でなじんで、25回で特技が開く。": "Buy new nets at the shop. Nets grow familiar with use and unlock a skill after 25 lifts.", "旅の人": "Traveler", "最大": "Max", "棚がいっぱい": "Shelf full", "次は <b>{0}日目の{1}</b> の小川へ。": "Next: the stream on <b>Day {0}, {1}</b>.", "残りの生き物を返す": "Release remaining creatures", "残りを全部換える": "Trade all remaining", "水槽 {0} → {1}匹": "Tank {0} → {1} creatures", "水槽 {0}/{1}": "Tank {0}/{1}", "水槽 {0}/{1}・展示棚 {2}/{3}・{4}pt": "Tank {0}/{1} · Shelf {2}/{3} · {4}pt", "水槽がいっぱい": "Tank full", "水槽が広くなった": "The tank got bigger", "水槽に入れた": "Put in the tank", "水槽へ": "To tank", "水槽を広げる": "Expand tank", "特技「{0}」": "Skill: {0} ·", "生き物": "Creatures", "生き物ごとに逃げ方が違うよ。図鑑のヒントを見てね。キラッと光る砂利には何かが埋まっているかも。": "Each creature escapes in its own way. Check the hints in your field guide. Something may be buried where the gravel sparkles.", "石": "Stones", "石や化石を並べよう。": "Line up stones and fossils.", "網": "Net", "網 {0}/100": "Net {0}/100", "網が破れた!でも今回の獲物は持ち帰れたよ": "The net tore! But you kept this catch", "網が破れている(「網」で修理)": "Net torn (repair on Nets screen)", "網が破れている。「網」で直そう": "The net is torn. Fix it on the Nets screen", "網が破れている。持ち替えるか、「網」で直そう": "The net is torn. Switch nets or fix it on the Nets screen", "網の中": "In the Net", "網の反対側から、網に向かってゆっくりなぞってみて": "Sweep slowly from the far side toward the net", "網を上げる": "Lift Net", "網を繕った。繕いの跡がひとつ増えた": "Mended the net. One more patch on it", "置いていく": "Leave behind", "資料館": "Exhibit Hall", "足りないときは、お店のおにぎりで補充しよう。": "Need more? Grab a rice ball at the shop.", "返した生き物が運んできてくれた(恩返し)": "A creature you released brought this (a thank-you gift)", "返す": "Release", "返すと川が豊かになって、珍しいものが出やすくなる": "Releasing creatures enriches the stream, so rare finds turn up more often", "逃げちゃった。もう一度、網の反対側からゆっくりなぞってみて": "It got away. Try again: sweep slowly from the far side", "開いた": "Unlocked", "食べもの": "Food", "{0}日目 {1}・{2}": "Day {0} {1} · {2}", "新しい行き先「{0}」が開いた!": "New destination unlocked: {0}!", "行き先": "Destination", "次は <b>{0}日目の{1}</b>。": "Next: <b>Day {0}, {1}</b>.", "準備中": "Coming soon", "屋台の麺": "Street Noodles", "体力 +50。東南アジアの屋台の味。": "Stamina +50. A taste of a Southeast Asian street stall.", "屋台の麺、おいしい!": "Yum, street noodles!", "Stage {0}の図鑑を{1}種集めると開く(今 {2}種)": "Opens when your Stage {0} guide has {1} entries (now {2})", "ミントティーとデーツ": "Mint Tea & Dates", "体力 +50。オアシスの木陰でひと休み。": "Stamina +50. A break in the shade of the oasis.", "ミントティーでひと休み。": "A refreshing mint tea break.", "暑い…昼の砂漠は体力の減りが早い": "Hot… stamina drains faster in the desert by day", "夜の砂漠は涼しくて、体力が減りにくい": "The desert night is cool. Stamina drains more slowly", "パンとオリーブ": "Bread & Olives", "体力 +50。海辺のお昼ごはん。": "Stamina +50. A seaside lunch.", "パンとオリーブ、おいしい!": "Yum, bread and olives!", "大きな波!何か打ち上げられたかも": "A big wave! Something may have washed ashore", "紅茶とスコーン": "Tea & Scones", "体力 +50。田園のティータイム。": "Stamina +50. Countryside teatime.", "紅茶とスコーンでひと休み。": "A break for tea and scones.", "雨が降ってきた。流れが速くなって、石がよく流れてくる": "It's starting to rain. The current speeds up and more stones wash down", "ドラゴンの卵": "Dragon's Egg", "ほんのり温かい。中で何かが動いている…<br>どうしよう?": "Gently warm. Something is moving inside…<br>What will you do?", "特別室に飾る": "Display it in the Special Room", "異界へ返す": "Return it to the Otherworld", "卵を特別室に飾った。帰るたびに、少しずつ…": "You placed the egg in the Special Room. Each time you come home, little by little…", "続ける": "Continue", "遊んでくれてありがとう!": "Thank you for playing!", "扉が開いた…": "The door has opened…", "扉の向こうから、ひとつの網が届いた。<br><b>「異界の網」</b>": "From beyond the door, a net arrived.<br><b>The Otherworld Net</b>", "地図の「?」から、異界へ行けるようになった。": "You can now reach the Otherworld from the “?” on the map.", "卵が孵った!": "The egg has hatched!", "小さなドラゴンが、博物館に住みつくことになった。": "A little dragon has made the museum its home.", "来館者が、どっと増えそう!": "Visitors are sure to pour in!", "子竜と親ドラゴンが、一緒に博物館の空を飛んでいる。": "The little dragon and its parent now fly together over the museum.", "夜空の水の奥から、大きなドラゴンが現れた…": "From deep within the night-sky water, a great dragon appeared…", "卵をそっとくわえて、空へ帰っていく。": "It gently took the egg in its mouth and flew back into the sky.", "足もとに、一枚の鱗が残っていた。<br><b>「竜の鱗のお守り」</b>": "At your feet, a single scale was left behind.<br><b>Dragon Scale Charm</b>", "川がいっそう豊かになり、網が傷みにくくなった。": "The streams grew richer, and your nets now wear out more slowly.", "「異界の網」を持っていけるようにしたよ": "The Otherworld Net is now ready to carry", "特別室": "Special Room", "？？？の特別室": "??? Special Room", "5つのかけらがそろった。並べてみよう…": "All five pieces are here. Try placing them…", "奥に扉がある。5つの謎のかけらを集めると、何かが起こりそう…": "There's a door in the back. Gather the five mysterious pieces and something may happen…", "ドラゴンの卵を飾っている(ひび {0}/3)": "The dragon's egg is on display (cracks {0}/3)", "子竜が館内を飛び回っている": "The little dragon flies around the halls", "竜の鱗のお守りが光っている": "The dragon scale charm is glowing", "扉は開いている。異界へ行ってみよう": "The door is open. Visit the Otherworld", "かけらを並べる": "Place the pieces", "子竜の見物料": "Little dragon viewing fees", "特別室の卵に、ひびが入った…({0}/3)": "The egg in the Special Room has cracked… ({0}/3)", "ボーナス": "Bonus", "卵が待っている": "An egg is waiting", "異界": "Otherworld", "泉の奥で、何かが光っている…": "Something is glowing deep in the spring…", "熱い!網が焦げた。卵は水に戻った…異界の網なら受け止められそう": "Hot! The net got scorched and the egg slipped back… the Otherworld Net could hold it", "海に返す": "Release", "異界に返す": "Release", "海に返した(+{0}pt・豊かさ+{1})": "Released to the sea (+{0}pt, richness +{1})", "異界に返した(+{0}pt・豊かさ+{1})": "Released to the Otherworld (+{0}pt, richness +{1})", "{0}を海に返した(豊かさ+{1})": "Released the {0} to the sea (richness +{1})", "{0}を異界に返した(豊かさ+{1})": "Released the {0} to the Otherworld (richness +{1})", "海の豊かさ {0}": "Sea richness {0}", "異界の豊かさ {0}": "Otherworld richness {0}", "子竜も一緒に来たよ": "The little dragon came along too!", "子竜が{0}を網へ追い返してくれた!": "The little dragon herded the {0} back into the net!"};
+Object.assign(EN,{"ダンパーとビリーティー": "Damper & Billy Tea", "体力 +50。焚き火で焼いたパンと、缶で沸かした紅茶。": "Stamina +50. Campfire bread and tea boiled in a tin can.", "ダンパーとビリーティーでひと休み。": "A break with damper and billy tea.", "日照りが続いて、水場がせまくなってきた": "The drought goes on. The water is shrinking.", "日差しが強い。少しずつ水が減っていく": "The sun is strong. The water is slowly going down.", "雨が降って、ビラボンに水が戻った": "Rain! Water has come back to the billabong.", "カモノハシが水にもぐった!": "The platypus dove under!", "朝と夕方には、カモノハシが現れることがあるらしい": "They say a platypus appears in the morning and evening."});
+Object.assign(EN,{"チャイとサモサ": "Chai & Samosa", "体力 +50。スパイスの効いたミルクティーと、揚げたての三角パイ。": "Stamina +50. Spiced milk tea and a freshly fried triangle pastry.", "チャイとサモサでひと休み。": "A break with chai and samosas.", "モンスーンで増水!上から生き物が流れてくる": "Monsoon flood! Creatures drift down from upstream.", "今日の川は穏やか。ハスの花が咲いている": "The river is calm today. The lotus flowers are in bloom."});
+Object.assign(EN,{"シマとチャンボ": "Nsima & Chambo", "体力 +50。とうもろこしの練りがゆと、湖の焼き魚。": "Stamina +50. Maize porridge and grilled fish from the lake.", "シマとチャンボでひと休み。": "A break with nsima and chambo.", "大きな影が近づいてくる…そっと待とう": "A big shadow is coming… wait quietly.", "カバがびっくりして、水が大きく揺れた!": "The hippo got startled — the water heaved!", "ワニがびっくりして、水が大きく揺れた!": "The crocodile got startled — the water heaved!", "ビリッ!まわりの生き物がしびれた": "Zap! The creatures around it are stunned.", "影が通り過ぎた": "The shadow has passed."});
 let LANG=S.lang||((navigator.language||'').toLowerCase().startsWith('ja')?'ja':'en');
 function L(t,...a){const x=(LANG==='en'&&EN[t])||t;return x.replace(/\{(\d)\}/g,(_,i)=>a[i]);}
 const PL=sp=>sp.st===4?'海':sp.st===6?'異界':'川';
@@ -535,7 +650,7 @@ const nN=t=>LANG==='en'?NETS[t].en[0]:NETS[t].name, nSp=t=>LANG==='en'?NETS[t].e
 const mN=i=>LANG==='en'?MUS[i].en:MUS[i].name, mD=i=>LANG==='en'?MUS[i].den:MUS[i].desc, sN=st=>LANG==='en'?st.en:st.name;
 const pN=p=>LANG==='en'?p.en[0]:p.n, pD=p=>LANG==='en'?p.en[1]:p.d, JN=()=>LANG==='en'?', ':'・';
 function applyLang(){document.documentElement.lang=LANG;document.querySelectorAll('[data-l]').forEach(el=>{if(!el.dataset.ja)el.dataset.ja=el.innerHTML;el.innerHTML=L(el.dataset.ja);});
- const lb=document.getElementById('langBtn');if(lb)lb.textContent=LANG==='en'?'日本語にする':'English';document.title=LANG==='en'?'Gasagasa Museum v1.0':'ガサガサ ミュージアム v1.0';}
+ const lb=document.getElementById('langBtn');if(lb)lb.textContent=LANG==='en'?'日本語にする':'English';document.title=LANG==='en'?'Gasagasa Museum v1.1':'ガサガサ ミュージアム v1.1';}
 let toastT=0;
 function toast(m){const t=$('toast');t.textContent=L(m);t.style.opacity=1;clearTimeout(toastT);toastT=setTimeout(()=>t.style.opacity=0,2200);}
 
@@ -748,6 +863,165 @@ function drawSp(g,sp,x,y,s,ang,ph,o){
  case 'pearlmussel':
   g.fillStyle='#2e2a24';g.beginPath();g.ellipse(0,0,L*.5,L*.24,0,0,7);g.fill();g.strokeStyle='rgba(150,130,100,.45)';g.lineWidth=Math.max(.5,L*.025);for(let i=1;i<4;i++){g.beginPath();g.ellipse(-L*.12,0,L*.12*i,L*.06*i,0,0,7);g.stroke();}
   g.fillStyle='rgba(255,255,255,.15)';g.beginPath();g.ellipse(L*.1,-L*.1,L*.2,L*.05,0,0,7);g.fill();break;
+ case 'rainbow':{
+  const gr=g.createLinearGradient(-L*.4,0,L*.4,0);const sh=(Math.sin(ph*.5)+1)/2;gr.addColorStop(0,'#e0703a');gr.addColorStop(.35+sh*.2,'#f2d25a');gr.addColorStop(.7,'#4aa8d8');gr.addColorStop(1,'#7a6ad8');
+  fish(g,L,L*.22,gr,w8*L*.06);g.strokeStyle='rgba(255,255,255,.5)';g.lineWidth=Math.max(.5,L*.03);g.beginPath();g.moveTo(-L*.3,0);g.lineTo(L*.3,-L*.02);g.stroke();eye(g,L*.32,-L*.04,L*.045);break;}
+ case 'blueeye':
+  fish(g,L,L*.15,'rgba(220,226,210,.85)',w8*L*.07);g.fillStyle='#3ab0ff';g.beginPath();g.arc(L*.3,-L*.03,L*.09,0,7);g.fill();eye(g,L*.31,-L*.03,L*.045);
+  g.fillStyle='rgba(255,220,90,.7)';g.beginPath();g.moveTo(-L*.38,0);g.lineTo(-L*.62,-L*.14);g.lineTo(-L*.62,L*.14);g.fill();break;
+ case 'glassebi':{
+  g.lineCap='round';g.strokeStyle='rgba(225,240,240,.7)';g.lineWidth=L*.18;g.beginPath();g.moveTo(L*.36,0);g.quadraticCurveTo(0,-L*.05,-L*.34,L*.07);g.stroke();
+  g.strokeStyle='rgba(150,180,180,.6)';g.lineWidth=Math.max(.5,L*.02);g.beginPath();g.moveTo(L*.36,0);g.quadraticCurveTo(0,-L*.05,-L*.34,L*.07);g.stroke();
+  g.fillStyle='rgba(225,240,240,.7)';g.beginPath();g.moveTo(-L*.32,L*.07);g.lineTo(-L*.5,-L*.04);g.lineTo(-L*.5,L*.2);g.closePath();g.fill();
+  g.fillStyle='rgba(240,140,60,.7)';g.beginPath();g.arc(L*.05,-L*.01,L*.05,0,7);g.fill();
+  g.strokeStyle='rgba(200,220,220,.6)';g.lineWidth=Math.max(.5,L*.015);g.beginPath();g.moveTo(L*.38,-L*.03);g.quadraticCurveTo(L*.7,-L*.22,L*.9,-L*.08);g.moveTo(L*.38,L*.03);g.quadraticCurveTo(L*.7,L*.22,L*.9,L*.08);g.stroke();
+  eye(g,L*.38,-L*.06,L*.035);eye(g,L*.38,L*.06,L*.035);break;}
+ case 'bellotama':
+  g.lineCap='round';g.strokeStyle='#5a6a34';for(const [w,l] of [[L*.13,.75],[L*.07,.95]]){g.lineWidth=w;g.beginPath();for(let i=0;i<=8;i++){const t=i/8;const xx=-t*L*l;const yy=Math.sin(ph*2.2-t*5)*L*.12*t;i?g.lineTo(xx,yy):g.moveTo(xx,yy);}g.stroke();}
+  g.fillStyle='#4f6a2e';g.beginPath();g.ellipse(L*.15,0,L*.3,L*.24,0,0,7);g.fill();g.fillStyle='#d9b84a';for(let i=0;i<5;i++){g.beginPath();g.arc(L*.05+pr(i+2)*L*.25,(pr(i+7)-.5)*L*.3,L*.035,0,7);g.fill();}
+  eye(g,L*.32,-L*.1,L*.045);eye(g,L*.32,L*.1,L*.045);break;
+ case 'gudgeon':
+  fish(g,L,L*.17,'#6a5a4c',w8*L*.05);g.fillStyle='#9a5ab8';for(let i=0;i<7;i++){g.beginPath();g.arc(L*.25-i*L*.09,(pr(i+4)-.5)*L*.2,L*.03,0,7);g.fill();}
+  g.fillStyle='#e0a040';g.beginPath();g.ellipse(-L*.5,0,L*.06,L*.12,0,0,7);g.fill();eye(g,L*.33,-L*.05,L*.04);break;
+ case 'spangled':
+  fish(g,L,L*.2,'#b9b08a',w8*L*.05);g.fillStyle='#d2442e';for(let i=0;i<10;i++){g.beginPath();g.arc(L*.28-pr(i+1)*L*.6,(pr(i+21)-.5)*L*.28,L*.022,0,7);g.fill();}eye(g,L*.33,-L*.05,L*.045);break;
+ case 'matsumo':{
+  g.fillStyle='#e6e2cc';g.beginPath();g.ellipse(0,0,L*.42,L*.18,0,0,7);g.fill();g.fillStyle='#3a3a30';g.beginPath();g.ellipse(-L*.05,0,L*.32,L*.1,0,0,7);g.fill();
+  g.strokeStyle='#3a3a30';g.lineWidth=Math.max(.6,L*.05);g.lineCap='round';const k=Math.sin(ph*3)*.4;for(const s of[-1,1]){g.beginPath();g.moveTo(-L*.05,s*L*.12);g.lineTo(-L*.35,s*(L*.42+k*L*.1));g.stroke();g.lineWidth=Math.max(.5,L*.025);g.beginPath();g.moveTo(L*.2,s*L*.12);g.lineTo(L*.35,s*L*.25);g.stroke();g.lineWidth=Math.max(.6,L*.05);}
+  g.fillStyle='#b83a2a';eye(g,L*.33,-L*.08,L*.05);eye(g,L*.33,L*.08,L*.05);break;}
+ case 'longfin':
+  worm(g,L,L*.13,'#5a5a3a',ph,.08);g.strokeStyle='rgba(120,120,80,.6)';g.lineWidth=Math.max(.5,L*.03);worm(g,L*.9,L*.2,'rgba(110,110,70,.35)',ph,.08);
+  g.fillStyle='#4a4a2e';g.beginPath();g.ellipse(L*.45,0,L*.07,L*.06,0,0,7);g.fill();eye(g,L*.46,-L*.03,L*.02);eye(g,L*.46,L*.03,L*.02);break;
+ case 'yabby':
+  g.strokeStyle='#3e5a7a';g.lineWidth=Math.max(.6,L*.03);g.lineCap='round';
+  for(const k of[-1,1]){for(let i=0;i<4;i++){g.beginPath();g.moveTo(L*.12-i*L*.07,k*L*.08);g.lineTo(L*.1-i*L*.07,k*L*.22);g.stroke();}
+   g.beginPath();g.moveTo(L*.3,k*L*.08);g.lineTo(L*.48,k*L*.18);g.stroke();g.fillStyle='#4a6a90';g.beginPath();g.ellipse(L*.62,k*L*.2,L*.16,L*.08,k*.3,0,7);g.fill();g.fillStyle='#d8e4ee';g.beginPath();g.ellipse(L*.7,k*L*.22,L*.05,L*.03,k*.3,0,7);g.fill();
+   g.beginPath();g.moveTo(L*.38,k*L*.03);g.quadraticCurveTo(L*.7,k*L*.12,L*.95,k*(L*.05+w8*L*.03));g.stroke();}
+  g.fillStyle='#4a6a90';g.beginPath();g.ellipse(L*.18,0,L*.2,L*.1,0,0,7);g.fill();
+  for(let i=0;i<5;i++){g.beginPath();g.ellipse(-L*.06-i*L*.08,0,L*.05,L*.085-i*L*.006,0,0,7);g.fill();}
+  g.beginPath();g.moveTo(-L*.42,0);g.lineTo(-L*.55,-L*.1);g.lineTo(-L*.55,L*.1);g.fill();eye(g,L*.36,-L*.04,L*.025);eye(g,L*.36,L*.04,L*.025);break;
+ case 'kubinaga':{
+  g.fillStyle='#6a6a48';for(const [x,y] of [[.18,-.26],[.18,.26],[-.22,-.24],[-.22,.24]]){g.beginPath();g.ellipse(L*x,L*y,L*.08,L*.05,y>0?.6:-.6,0,7);g.fill();}
+  const nk=Math.sin(ph*.8)*L*.06;g.strokeStyle='#6a6a48';g.lineCap='round';g.lineWidth=L*.09;g.beginPath();g.moveTo(L*.2,0);g.quadraticCurveTo(L*.38,nk,L*.55,nk*.5);g.stroke();
+  g.fillStyle='#6a6a48';g.beginPath();g.ellipse(L*.58,nk*.5,L*.07,L*.055,0,0,7);g.fill();eye(g,L*.6,nk*.5-L*.035,L*.018);eye(g,L*.6,nk*.5+L*.035,L*.018);
+  g.fillStyle='#5a5838';g.beginPath();g.ellipse(-L*.02,0,L*.28,L*.24,0,0,7);g.fill();g.strokeStyle='rgba(30,30,20,.4)';g.lineWidth=Math.max(.5,L*.02);
+  for(let i=-1;i<=1;i++){g.beginPath();g.ellipse(-L*.02+i*L*.13,0,L*.07,L*.1,0,0,7);g.stroke();}g.beginPath();g.ellipse(-L*.02,0,L*.28,L*.24,0,0,7);g.stroke();break;}
+ case 'haigyo':
+  fish(g,L,L*.14,'#6a6650',w8*L*.04);g.fillStyle='#57533e';for(let i=0;i<9;i++){g.beginPath();g.arc(L*.3-i*L*.08,(i%2?1:-1)*L*.04,L*.03,0,7);g.fill();}
+  g.strokeStyle='#6a6650';g.lineWidth=Math.max(.6,L*.03);for(const k of[-1,1]){g.beginPath();g.moveTo(L*.2,k*L*.1);g.quadraticCurveTo(L*.1,k*L*.25,L*0,k*L*.3);g.moveTo(-L*.1,k*L*.1);g.quadraticCurveTo(-L*.2,k*L*.22,-L*.3,k*L*.26);g.stroke();}
+  eye(g,L*.36,-L*.04,L*.03);break;
+ case 'murraycod':
+  fish(g,L,L*.21,'#7a8a52',w8*L*.05);g.fillStyle='rgba(40,60,30,.55)';for(let i=0;i<14;i++){g.beginPath();g.arc(L*.3-pr(i+3)*L*.62,(pr(i+33)-.5)*L*.32,L*.03,0,7);g.fill();}
+  g.fillStyle='#e8e2c6';g.beginPath();g.ellipse(L*.42,0,L*.06,L*.12,0,0,7);g.fill();eye(g,L*.33,-L*.07,L*.045);break;
+ case 'kamonohashi':{
+  const k=Math.sin(ph*1.6);g.fillStyle='#6a4a30';
+  for(const [x,y,a] of [[.18,-.22,-.6],[.18,.22,.6],[-.2,-.2,-.9],[-.2,.2,.9]]){g.save();g.translate(L*x,L*y);g.rotate(a+(x>0?k*.4:-k*.4));g.beginPath();g.ellipse(0,0,L*.1,L*.05,0,0,7);g.fill();g.restore();}
+  g.fillStyle='#5a3c26';g.beginPath();g.moveTo(-L*.3,0);g.quadraticCurveTo(-L*.5,-L*.14,-L*.58,0);g.quadraticCurveTo(-L*.5,L*.14,-L*.3,0);g.fill();
+  g.fillStyle='#7a5536';g.beginPath();g.ellipse(0,0,L*.34,L*.18,0,0,7);g.fill();g.fillStyle='rgba(255,230,190,.18)';g.beginPath();g.ellipse(L*.05,-L*.05,L*.22,L*.07,0,0,7);g.fill();
+  g.fillStyle='#7a5536';g.beginPath();g.ellipse(L*.3,0,L*.12,L*.12,0,0,7);g.fill();
+  g.fillStyle='#3a3530';g.beginPath();g.ellipse(L*.5,0,L*.13,L*.08,0,0,7);g.fill();g.strokeStyle='rgba(255,255,255,.15)';g.lineWidth=Math.max(.5,L*.015);g.beginPath();g.moveTo(L*.4,0);g.lineTo(L*.6,0);g.stroke();
+  eye(g,L*.33,-L*.06,L*.025);eye(g,L*.33,L*.06,L*.025);break;}
+ case 'utaka':
+  fish(g,L,L*.17,'#3f7fd0',w8*L*.06);g.fillStyle='rgba(200,230,255,.5)';g.beginPath();g.ellipse(L*.05,-L*.04,L*.25,L*.04,0,0,7);g.fill();eye(g,L*.33,-L*.04,L*.045);break;
+ case 'yellowlab':
+  fish(g,L,L*.22,'#f2d230',w8*L*.05);g.strokeStyle='#222';g.lineWidth=Math.max(.6,L*.04);g.beginPath();g.moveTo(-L*.3,-L*.12);g.quadraticCurveTo(0,-L*.2,L*.25,-L*.13);g.stroke();eye(g,L*.33,-L*.05,L*.05);break;
+ case 'zebracichlid':{
+  fish(g,L,L*.22,'#5a8ad8',w8*L*.05);g.fillStyle='rgba(20,25,60,.75)';for(let i=0;i<6;i++){const x=L*.22-i*L*.1;g.fillRect(x-L*.025,-L*.18,L*.05,L*.36);}
+  eye(g,L*.33,-L*.05,L*.05);break;}
+ case 'malawisnail':
+  g.fillStyle='#6a5640';g.beginPath();g.moveTo(L*.45,0);g.lineTo(-L*.4,-L*.16);g.quadraticCurveTo(-L*.5,0,-L*.4,L*.16);g.closePath();g.fill();
+  g.strokeStyle='rgba(230,210,170,.5)';g.lineWidth=Math.max(.5,L*.03);for(let i=0;i<5;i++){const x=L*.3-i*L*.15;g.beginPath();g.moveTo(x,-L*.16*(1-x/L*.9));g.lineTo(x-L*.06,L*.16*(1-x/L*.9));g.stroke();}
+  g.fillStyle='rgba(120,90,60,.7)';for(let i=0;i<6;i++){g.beginPath();g.arc(L*.3-pr(i+5)*L*.6,(pr(i+9)-.5)*L*.2,L*.025,0,7);g.fill();}break;
+ case 'synodontis':
+  fish(g,L,L*.21,'#d8cfb8',w8*L*.05);g.fillStyle='#2b2620';for(let i=0;i<12;i++){g.beginPath();g.arc(L*.3-pr(i+2)*L*.62,(pr(i+40)-.5)*L*.3,L*.035,0,7);g.fill();}
+  g.strokeStyle='#d8cfb8';g.lineWidth=Math.max(.5,L*.02);for(const k of[-1,1]){g.beginPath();g.moveTo(L*.42,k*L*.04);g.quadraticCurveTo(L*.6,k*L*.12,L*.66,k*L*.24);g.moveTo(L*.4,k*L*.07);g.quadraticCurveTo(L*.5,k*L*.2,L*.5,k*L*.3);g.stroke();}eye(g,L*.33,-L*.06,L*.04);break;
+ case 'demasoni':{
+  fish(g,L,L*.2,'#2a3a8a',w8*L*.06);g.fillStyle='#7ab8ff';for(let i=0;i<5;i++){const x=L*.25-i*L*.13;g.fillRect(x-L*.035,-L*.17,L*.05,L*.34);}eye(g,L*.33,-L*.05,L*.045);break;}
+ case 'potamon':
+  g.strokeStyle='#8a4a30';g.lineWidth=Math.max(.8,L*.06);g.lineCap='round';for(const k of[-1,1]){for(let i=0;i<4;i++){const y=k*L*(.12+i*.08);g.beginPath();g.moveTo(k*0,y*.5);g.lineTo(-L*.3+i*L*.05,y*1.5);g.stroke();}
+   g.fillStyle='#9a5236';g.beginPath();g.ellipse(L*.38,k*L*.22,L*.12,L*.08,k*.4,0,7);g.fill();}
+  g.fillStyle='#a05a3a';g.beginPath();g.ellipse(0,0,L*.32,L*.28,0,0,7);g.fill();g.fillStyle='rgba(255,220,180,.2)';g.beginPath();g.ellipse(L*.05,-L*.08,L*.18,L*.1,0,0,7);g.fill();
+  eye(g,L*.3,-L*.08,L*.035);eye(g,L*.3,L*.08,L*.035);break;
+ case 'tsumegaeru':{
+  const k=Math.sin(ph*1.5)*.3;g.fillStyle='#8a8a6a';for(const s of[-1,1]){g.save();g.translate(-L*.25,s*L*.15);g.rotate(s*(.6+k));g.beginPath();g.ellipse(-L*.18,0,L*.22,L*.07,0,0,7);g.fill();g.fillStyle='#222';g.beginPath();g.arc(-L*.4,0,L*.03,0,7);g.fill();g.fillStyle='#8a8a6a';g.restore();}
+  for(const s of[-1,1]){g.beginPath();g.ellipse(L*.18,s*L*.2,L*.08,L*.035,s*.8,0,7);g.fill();}
+  g.fillStyle='#7a7a5a';g.beginPath();g.ellipse(0,0,L*.32,L*.22,0,0,7);g.fill();g.fillStyle='rgba(60,60,40,.4)';for(let i=0;i<6;i++){g.beginPath();g.arc(L*.1-pr(i+3)*L*.4,(pr(i+8)-.5)*L*.3,L*.035,0,7);g.fill();}
+  eye(g,L*.24,-L*.08,L*.035);eye(g,L*.24,L*.08,L*.035);break;}
+ case 'eblue':{
+  const gl=.6+.4*Math.sin(ph*1.3);g.shadowColor='rgba(80,170,255,.8)';g.shadowBlur=L*.25*gl;fish(g,L,L*.21,'#3a8cff',w8*L*.06);g.shadowBlur=0;
+  g.fillStyle='rgba(20,40,120,.45)';for(let i=0;i<6;i++){g.fillRect(L*.22-i*L*.1-L*.02,-L*.16,L*.035,L*.32);}g.fillStyle='#e8f4ff';g.beginPath();g.ellipse(-L*.1,-L*.18,L*.25,L*.03,0,0,7);g.fill();eye(g,L*.33,-L*.05,L*.045);break;}
+ case 'mouthbrooder':
+  fish(g,L,L*.22,'#b88a5a',w8*L*.05);g.fillStyle='rgba(255,180,90,.6)';g.beginPath();g.ellipse(L*.32,L*.04,L*.1,L*.08,0,0,7);g.fill();
+  g.fillStyle='#e0a060';for(let i=0;i<3;i++){g.beginPath();g.arc(-L*.25+i*L*.08,L*.1,L*.03,0,7);g.fill();}eye(g,L*.33,-L*.06,L*.045);break;
+ case 'wanigo':{
+  const k=Math.sin(ph*.9)*.12;g.fillStyle='#4f5a34';
+  for(const [x,y] of [[.15,-.18],[.15,.18],[-.15,-.17],[-.15,.17]]){g.beginPath();g.ellipse(L*x,L*y,L*.07,L*.035,y>0?.9:-.9,0,7);g.fill();}
+  g.beginPath();g.moveTo(-L*.2,-L*.06);g.quadraticCurveTo(-L*.45,-L*.04+k*L*.2,-L*.62,k*L*.3);g.quadraticCurveTo(-L*.45,L*.04+k*L*.2,-L*.2,L*.06);g.fill();
+  g.beginPath();g.ellipse(0,0,L*.24,L*.12,0,0,7);g.fill();g.beginPath();g.moveTo(L*.2,-L*.08);g.lineTo(L*.55,-L*.035);g.quadraticCurveTo(L*.6,0,L*.55,L*.035);g.lineTo(L*.2,L*.08);g.fill();
+  g.fillStyle='rgba(30,35,15,.5)';for(let i=0;i<7;i++){g.fillRect(L*.15-i*L*.09,-L*.07,L*.04,L*.14);}
+  g.fillStyle='#d8c860';g.beginPath();g.arc(L*.28,-L*.06,L*.03,0,7);g.arc(L*.28,L*.06,L*.03,0,7);g.fill();g.fillStyle='#111';g.fillRect(L*.275,-L*.075,L*.012,L*.03);g.fillRect(L*.275,L*.045,L*.012,L*.03);break;}
+ case 'tigerfish':
+  fish(g,L,L*.2,'#c8ccc0',w8*L*.05);g.strokeStyle='rgba(30,30,30,.6)';g.lineWidth=Math.max(.5,L*.025);for(let k=-2;k<=2;k++){g.beginPath();g.moveTo(L*.3,k*L*.045);g.lineTo(-L*.35,k*L*.05);g.stroke();}
+  g.fillStyle='#d23a2a';g.beginPath();g.moveTo(-L*.38,0);g.lineTo(-L*.58,-L*.16);g.lineTo(-L*.58,L*.16);g.fill();
+  g.fillStyle='#fff';for(let i=0;i<3;i++){g.beginPath();g.moveTo(L*.42+i*L*.025,-L*.035);g.lineTo(L*.43+i*L*.025,-L*.075);g.lineTo(L*.44+i*L*.025,-L*.035);g.fill();}eye(g,L*.35,-L*.06,L*.045);break;
+ case 'denkinamazu':{
+  fish(g,L,L*.22,'#a8a08a',w8*L*.04);g.fillStyle='#4a4234';for(let i=0;i<10;i++){g.beginPath();g.arc(L*.3-pr(i+7)*L*.6,(pr(i+17)-.5)*L*.3,L*.035,0,7);g.fill();}
+  g.strokeStyle='#a8a08a';g.lineWidth=Math.max(.5,L*.02);for(const k of[-1,1]){g.beginPath();g.moveTo(L*.44,k*L*.05);g.quadraticCurveTo(L*.6,k*L*.15,L*.62,k*L*.28);g.stroke();}
+  const z=Math.sin(ph*4)>.7;if(z){g.strokeStyle='rgba(255,240,120,.9)';g.lineWidth=Math.max(.8,L*.03);g.beginPath();g.moveTo(-L*.1,-L*.25);g.lineTo(-L*.02,-L*.33);g.lineTo(-L*.08,-L*.36);g.lineTo(0,-L*.45);g.stroke();}
+  eye(g,L*.34,-L*.06,L*.03);break;}
+ case 'zebradanio':
+  fish(g,L,L*.14,'#e8e0b8',w8*L*.07);g.fillStyle='#2a3a8a';for(const k of[-1,0,1]){g.fillRect(-L*.4,k*L*.05-L*.012,L*.75,L*.024);}eye(g,L*.33,-L*.03,L*.04);break;
+ case 'rosybarb':{
+  const gr=g.createLinearGradient(0,-L*.2,0,L*.2);gr.addColorStop(0,'#e8a070');gr.addColorStop(1,'#e8506a');fish(g,L,L*.23,gr,w8*L*.05);g.fillStyle='#2a2020';g.beginPath();g.arc(-L*.22,0,L*.05,0,7);g.fill();eye(g,L*.33,-L*.05,L*.045);break;}
+ case 'glassfish':
+  g.globalAlpha*=.75;fish(g,L,L*.22,'rgba(220,235,235,.35)',w8*L*.05);g.globalAlpha/=.75;g.strokeStyle='rgba(180,200,210,.8)';g.lineWidth=Math.max(.5,L*.02);
+  g.beginPath();g.moveTo(L*.32,0);g.lineTo(-L*.42,0);for(let i=0;i<8;i++){const x=L*.22-i*L*.08;g.moveTo(x,0);g.lineTo(x-L*.03,-L*.15);g.moveTo(x,0);g.lineTo(x-L*.03,L*.15);}g.stroke();
+  g.fillStyle='rgba(230,200,120,.6)';g.beginPath();g.ellipse(L*.12,L*.04,L*.08,L*.05,0,0,7);g.fill();eye(g,L*.33,-L*.05,L*.05);break;
+ case 'amenbo':{
+  g.strokeStyle='#3a3020';g.lineWidth=Math.max(.6,L*.03);g.lineCap='round';const k=Math.sin(ph*3)*.15;
+  for(const s of[-1,1]){g.beginPath();g.moveTo(L*.15,s*L*.04);g.lineTo(L*.35,s*L*.18);g.moveTo(-L*.02,s*L*.04);g.lineTo(L*.05,s*(L*.5+k*L*.2));g.lineTo(-L*.1,s*L*.6);g.moveTo(-L*.12,s*L*.04);g.lineTo(-L*.45,s*(L*.45-k*L*.2));g.lineTo(-L*.7,s*L*.5);g.stroke();
+   g.strokeStyle='rgba(255,255,255,.35)';g.beginPath();g.arc(-L*.1,s*L*.6,L*.06,0,7);g.arc(-L*.7,s*L*.5,L*.06,0,7);g.stroke();g.strokeStyle='#3a3020';}
+  g.fillStyle='#4a3f2a';g.beginPath();g.ellipse(0,0,L*.32,L*.06,0,0,7);g.fill();eye(g,L*.3,-L*.035,L*.025);eye(g,L*.3,L*.035,L*.025);break;}
+ case 'abeny':
+  if(o.puff){g.fillStyle='#d9c050';g.beginPath();g.arc(0,0,L*.42,0,7);g.fill();g.fillStyle='rgba(60,60,30,.45)';for(let i=0;i<9;i++){g.beginPath();g.arc((pr(i+3)-.5)*L*.6,(pr(i+8)-.5)*L*.6,L*.06,0,7);g.fill();}
+   g.strokeStyle='rgba(120,100,40,.6)';g.lineWidth=Math.max(.5,L*.02);for(let i=0;i<14;i++){const a=i/14*6.28;g.beginPath();g.moveTo(Math.cos(a)*L*.42,Math.sin(a)*L*.42);g.lineTo(Math.cos(a)*L*.5,Math.sin(a)*L*.5);g.stroke();}
+   g.fillStyle='rgba(255,250,220,.6)';g.beginPath();g.ellipse(L*.05,L*.12,L*.2,L*.12,0,0,7);g.fill();eye(g,L*.3,-L*.12,L*.06);eye(g,L*.3,L*.12,L*.06);break;}
+  g.fillStyle='#d9c050';g.beginPath();g.ellipse(L*.05,0,L*.38,L*.22,0,0,7);g.fill();g.beginPath();g.moveTo(-L*.3,0);g.lineTo(-L*.52,-L*.12+w8*L*.05);g.lineTo(-L*.52,L*.12+w8*L*.05);g.fill();
+  g.fillStyle='rgba(60,60,30,.45)';for(let i=0;i<7;i++){g.beginPath();g.arc(L*.25-pr(i+3)*L*.5,(pr(i+8)-.5)*L*.3,L*.05,0,7);g.fill();}eye(g,L*.3,-L*.1,L*.065);eye(g,L*.3,L*.1,L*.065);break;
+ case 'giantdanio':
+  fish(g,L,L*.18,'#7a9ab8',w8*L*.06);g.fillStyle='#f0d070';for(const k of[-1,1]){g.fillRect(-L*.35,k*L*.05-L*.015,L*.6,L*.03);}g.fillStyle='#2a4a8a';g.fillRect(-L*.35,-L*.015,L*.6,L*.03);eye(g,L*.33,-L*.04,L*.045);break;
+ case 'tenaga':
+  g.strokeStyle='#5a6a5a';g.lineWidth=Math.max(.6,L*.03);g.lineCap='round';
+  for(const k of[-1,1]){g.beginPath();g.moveTo(L*.3,k*L*.06);g.quadraticCurveTo(L*.6,k*L*.25,L*.95,k*L*.18);g.stroke();g.fillStyle='#4a5a4a';g.beginPath();g.ellipse(L*.98,k*L*.17,L*.08,L*.03,k*.2,0,7);g.fill();
+   for(let i=0;i<3;i++){g.beginPath();g.moveTo(L*.1-i*L*.08,k*L*.07);g.lineTo(L*.08-i*L*.08,k*L*.18);g.stroke();}
+   g.beginPath();g.moveTo(L*.38,k*L*.03);g.quadraticCurveTo(L*.6,k*L*.06,L*.75,k*L*.02);g.stroke();}
+  g.fillStyle='rgba(140,160,140,.9)';g.beginPath();g.ellipse(L*.15,0,L*.2,L*.09,0,0,7);g.fill();for(let i=0;i<5;i++){g.beginPath();g.ellipse(-L*.08-i*L*.07,0,L*.05,L*.075-i*L*.006,0,0,7);g.fill();}
+  g.beginPath();g.moveTo(-L*.4,0);g.lineTo(-L*.52,-L*.09);g.lineTo(-L*.52,L*.09);g.fill();eye(g,L*.34,-L*.04,L*.025);eye(g,L*.34,L*.04,L*.025);break;
+ case 'ushigaeru':{
+  const k=Math.sin(ph*1.2)*.25;g.fillStyle='#b8b040';for(const s of[-1,1]){g.save();g.translate(-L*.2,s*L*.18);g.rotate(s*(.5+k));g.beginPath();g.ellipse(-L*.18,0,L*.24,L*.08,0,0,7);g.fill();g.restore();g.beginPath();g.ellipse(L*.2,s*L*.22,L*.1,L*.04,s*.8,0,7);g.fill();}
+  g.fillStyle='#c8c040';g.beginPath();g.ellipse(0,0,L*.34,L*.26,0,0,7);g.fill();g.fillStyle='rgba(80,90,20,.5)';for(let i=0;i<8;i++){g.beginPath();g.arc(L*.15-pr(i+3)*L*.4,(pr(i+8)-.5)*L*.35,L*.04,0,7);g.fill();}
+  g.strokeStyle='rgba(240,230,120,.8)';g.lineWidth=Math.max(.5,L*.025);g.beginPath();g.moveTo(-L*.3,0);g.lineTo(L*.3,0);g.stroke();eye(g,L*.25,-L*.11,L*.045);eye(g,L*.25,L*.11,L*.045);break;}
+ case 'denison':
+  fish(g,L,L*.17,'#d8d4c0',w8*L*.06);g.fillStyle='#1a1a1a';g.fillRect(-L*.42,-L*.012,L*.75,L*.03);g.fillStyle='#e03a2a';g.fillRect(-L*.05,-L*.07,L*.4,L*.035);
+  g.fillStyle='#e8d040';g.beginPath();g.moveTo(-L*.38,0);g.lineTo(-L*.58,-L*.12);g.lineTo(-L*.5,0);g.lineTo(-L*.58,L*.12);g.fill();g.fillStyle='#1a1a1a';g.beginPath();g.arc(-L*.55,-L*.1,L*.025,0,7);g.arc(-L*.55,L*.1,L*.025,0,7);g.fill();eye(g,L*.33,-L*.03,L*.04);break;
+ case 'togeunagi':
+  worm(g,L,L*.12,'#8a6a40',ph,.07);g.fillStyle='#6a4e2c';for(let i=0;i<6;i++){g.beginPath();g.arc(L*.25-i*L*.13,0,L*.03,0,7);g.fill();}
+  g.fillStyle='#8a6a40';g.beginPath();g.moveTo(L*.45,-L*.04);g.lineTo(L*.62,0);g.lineTo(L*.45,L*.04);g.fill();eye(g,L*.42,-L*.03,L*.02);break;
+ case 'hakosuppon':
+  g.fillStyle='#7a7a5a';for(const [x,y] of [[.2,-.25],[.2,.25],[-.2,-.24],[-.2,.24]]){g.beginPath();g.ellipse(L*x,L*y,L*.07,L*.05,y>0?.6:-.6,0,7);g.fill();}
+  g.beginPath();g.ellipse(L*.4,0,L*.09,L*.07,0,0,7);g.fill();g.beginPath();g.moveTo(L*.47,-L*.02);g.lineTo(L*.56,0);g.lineTo(L*.47,L*.02);g.fill();
+  g.fillStyle='#6a6a48';g.beginPath();g.ellipse(0,0,L*.32,L*.28,0,0,7);g.fill();g.fillStyle='rgba(230,210,120,.6)';for(let i=0;i<7;i++){g.beginPath();g.arc(L*.15-pr(i+2)*L*.35,(pr(i+9)-.5)*L*.35,L*.035,0,7);g.fill();}
+  eye(g,L*.43,-L*.03,L*.018);eye(g,L*.43,L*.03,L*.018);break;
+ case 'mahseer':{
+  const gr=g.createLinearGradient(0,-L*.2,0,L*.2);gr.addColorStop(0,'#8a7030');gr.addColorStop(.5,'#e8c050');gr.addColorStop(1,'#c89a3a');fish(g,L,L*.22,gr,w8*L*.05);
+  g.strokeStyle='rgba(120,90,30,.45)';g.lineWidth=Math.max(.4,L*.015);for(let i=0;i<7;i++){g.beginPath();g.arc(L*.2-i*L*.09,0,L*.08,-1,1);g.stroke();}eye(g,L*.33,-L*.06,L*.045);break;}
+ case 'gavial':{
+  const k=Math.sin(ph*.9)*.12;g.fillStyle='#5f6a4a';
+  for(const [x,y] of [[.12,-.16],[.12,.16],[-.15,-.15],[-.15,.15]]){g.beginPath();g.ellipse(L*x,L*y,L*.06,L*.03,y>0?.9:-.9,0,7);g.fill();}
+  g.beginPath();g.moveTo(-L*.18,-L*.05);g.quadraticCurveTo(-L*.45,-L*.03+k*L*.2,-L*.6,k*L*.3);g.quadraticCurveTo(-L*.45,L*.03+k*L*.2,-L*.18,L*.05);g.fill();
+  g.beginPath();g.ellipse(0,0,L*.22,L*.1,0,0,7);g.fill();g.beginPath();g.ellipse(L*.22,0,L*.07,L*.07,0,0,7);g.fill();g.fillRect(L*.22,-L*.022,L*.42,L*.044);g.beginPath();g.arc(L*.64,0,L*.035,0,7);g.fill();
+  g.fillStyle='rgba(40,45,25,.5)';for(let i=0;i<6;i++){g.fillRect(L*.13-i*L*.08,-L*.06,L*.035,L*.12);}
+  g.fillStyle='#e0d070';g.beginPath();g.arc(L*.22,-L*.05,L*.025,0,7);g.arc(L*.22,L*.05,L*.025,0,7);g.fill();break;}
  case 'hoshikuzu':
   fish(g,L,L*.16,'rgba(150,200,255,.55)',w8*L*.06);g.fillStyle='#ffffff';for(let i=0;i<5;i++){g.beginPath();g.arc(L*.25-i*L*.14,(i%2?1:-1)*L*.04,L*.035,0,7);g.fill();}break;
  case 'kurage':{
@@ -909,6 +1183,20 @@ function drawItem(g,sp,r,seed,ph){
   if(p==='turq'){g.strokeStyle='rgba(60,45,30,.6)';g.lineWidth=Math.max(.5,r*.04);for(let i=0;i<6;i++){g.beginPath();g.moveTo((pr(seed+i)-.5)*r*2,(pr(seed+i+3)-.5)*r*2);g.lineTo((pr(seed+i+11)-.5)*r*2,(pr(seed+i+17)-.5)*r*2);g.stroke();}}
   if(p==='layer'){g.lineWidth=Math.max(.6,r*.12);for(let i=-3;i<4;i++){g.strokeStyle=i%2?'rgba(160,110,60,.45)':'rgba(255,245,225,.4)';g.beginPath();g.moveTo(-r*1.2,i*r*.25);g.quadraticCurveTo(0,i*r*.25+r*.1,r*1.2,i*r*.25);g.stroke();}}
   if(p==='jade'){for(let i=0;i<5;i++){g.fillStyle='rgba(200,240,215,.4)';g.beginPath();g.arc((pr(seed+i)-.5)*r*1.4,(pr(seed+i+9)-.5)*r*1.2,r*.25,0,7);g.fill();}}
+  if(p==='laterite'){for(let i=0;i<10;i++){g.fillStyle=i%2?'rgba(60,25,15,.55)':'rgba(220,140,90,.45)';g.beginPath();g.arc((pr(seed+i)-.5)*r*1.7,(pr(seed+i+30)-.5)*r*1.4,r*(.08+pr(seed+i+60)*.12),0,7);g.fill();}}
+  if(p==='zebra'){g.fillStyle='rgba(150,60,40,.75)';for(let i=-4;i<5;i++){g.beginPath();g.moveTo(-r*1.2,i*r*.3);g.quadraticCurveTo(0,i*r*.3+r*.18,r*1.2,i*r*.3-r*.05);g.lineTo(r*1.2,i*r*.3+r*.07);g.quadraticCurveTo(0,i*r*.3+r*.28,-r*1.2,i*r*.3+r*.1);g.closePath();g.fill();}}
+  if(p==='mookaite'){const cs=['rgba(240,200,90,.7)','rgba(150,80,150,.6)','rgba(250,230,200,.5)','rgba(170,50,50,.6)'];for(let i=0;i<8;i++){g.fillStyle=cs[i%4];g.beginPath();g.ellipse((pr(seed+i)-.5)*r*1.5,(pr(seed+i+12)-.5)*r*1.2,r*(.2+pr(seed+i+5)*.25),r*(.12+pr(seed+i+8)*.15),pr(seed+i+3)*3,0,7);g.fill();}}
+  if(p==='opal'){const dark=sp.id==='blackopal';const t=ph*.8;for(let i=0;i<(dark?9:6);i++){const a=pr(seed+i)*6.28,x=(pr(seed+i+4)-.5)*r*1.3,y=(pr(seed+i+9)-.5)*r*1.1;const hue=(i*55+t*40+seed*7)%360;g.fillStyle=`hsla(${hue},90%,${dark?60:62}%,${dark?.85:.75})`;g.beginPath();g.ellipse(x,y,r*(.14+pr(seed+i+2)*.2),r*(.06+pr(seed+i+6)*.1),a,0,7);g.fill();}
+   if(!dark){g.strokeStyle='rgba(60,35,18,.6)';g.lineWidth=Math.max(.6,r*.12);g.beginPath();g.moveTo(-r,r*.2);g.quadraticCurveTo(0,-r*.2,r,r*.35);g.stroke();}}
+  if(p==='mica'){for(let i=0;i<7;i++){const y=-r*.7+i*r*.22;g.fillStyle=i%2?'rgba(255,245,210,.45)':'rgba(120,95,55,.35)';g.beginPath();g.ellipse(0,y,r*(.9-Math.abs(i-3)*.12),r*.07,(pr(seed+i)-.5)*.3,0,7);g.fill();}const tw=.5+.5*Math.sin(ph*2+seed);g.fillStyle=`rgba(255,255,240,${.4+.5*tw})`;g.beginPath();g.arc(r*.25,-r*.2,r*.08*tw+r*.03,0,7);g.fill();}
+  if(p==='malachite'){for(let i=7;i>0;i--){g.fillStyle=i%2?'rgba(10,70,40,.55)':'rgba(120,220,160,.45)';g.beginPath();g.ellipse(r*.25,r*.3,r*.15*i,r*.11*i,.4,0,7);g.fill();}}
+  if(p==='tigereye'){const m=Math.sin(ph*1.2+seed)*r*.5;for(let i=-5;i<6;i++){g.fillStyle=i%2?'rgba(60,35,10,.4)':'rgba(240,190,90,.35)';g.fillRect(-r*1.2,i*r*.16,r*2.4,r*.08);}const gr=g.createLinearGradient(0,m-r*.35,0,m+r*.35);gr.addColorStop(0,'rgba(255,225,140,0)');gr.addColorStop(.5,'rgba(255,225,140,.75)');gr.addColorStop(1,'rgba(255,225,140,0)');g.fillStyle=gr;g.fillRect(-r*1.2,m-r*.35,r*2.4,r*.7);}
+  if(p==='needle'){g.strokeStyle='rgba(255,255,255,.75)';g.lineWidth=Math.max(.5,r*.04);for(let c=0;c<3;c++){const cx=(pr(seed+c)-.5)*r*.9,cy=(pr(seed+c+5)-.5)*r*.7;for(let i=0;i<9;i++){const a=i/9*6.28;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(a)*r*.32,cy+Math.sin(a)*r*.32);g.stroke();}}}
+  if(p==='soap'){const gr=g.createRadialGradient(-r*.3,-r*.3,0,0,0,r);gr.addColorStop(0,'rgba(255,255,255,.35)');gr.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gr;g.fillRect(-r,-r,r*2,r*2);g.strokeStyle='rgba(90,110,80,.3)';g.lineWidth=Math.max(.5,r*.04);g.beginPath();g.moveTo(-r,r*.1);g.quadraticCurveTo(0,-r*.2,r,r*.25);g.stroke();}
+  if(p==='moonglow'){const m=Math.sin(ph*1.1+seed)*r*.35;const gr=g.createRadialGradient(m,-r*.1,0,m,-r*.1,r*.7);gr.addColorStop(0,'rgba(150,200,255,.85)');gr.addColorStop(1,'rgba(150,200,255,0)');g.fillStyle=gr;g.fillRect(-r*1.2,-r*1.2,r*2.4,r*2.4);}
+  if(p==='blood'){g.fillStyle='rgba(200,40,40,.85)';for(let i=0;i<12;i++){g.beginPath();g.arc((pr(seed+i)-.5)*r*1.5,(pr(seed+i+20)-.5)*r*1.2,r*(.04+pr(seed+i+40)*.06),0,7);g.fill();}}
+  if(p==='catseye'){const m=Math.sin(ph*1.3+seed)*r*.4;const gr=g.createLinearGradient(m-r*.15,0,m+r*.15,0);gr.addColorStop(0,'rgba(255,250,210,0)');gr.addColorStop(.5,'rgba(255,250,210,.95)');gr.addColorStop(1,'rgba(255,250,210,0)');g.fillStyle=gr;g.fillRect(m-r*.15,-r*1.2,r*.3,r*2.4);}
+  if(p==='starruby'){const gr=g.createRadialGradient(0,0,0,0,0,r*.8);gr.addColorStop(0,'rgba(255,190,200,.55)');gr.addColorStop(1,'rgba(255,190,200,0)');g.fillStyle=gr;g.fillRect(-r,-r,r*2,r*2);g.strokeStyle=`rgba(255,235,240,${.6+.3*Math.sin(ph*1.5)})`;g.lineWidth=Math.max(.6,r*.05);for(let i=0;i<3;i++){const a=i*Math.PI/3+.2;g.beginPath();g.moveTo(-Math.cos(a)*r*.75,-Math.sin(a)*r*.75);g.lineTo(Math.cos(a)*r*.75,Math.sin(a)*r*.75);g.stroke();}}
   g.restore();shine(g,r);return;
  }
  if(p==='scale'){
@@ -988,10 +1276,47 @@ function drawItem(g,sp,r,seed,ph){
   g.beginPath();g.moveTo(-r*.7,-r*.35);g.quadraticCurveTo(-r*.75,-r*.6,-r*.4,-r*.55);g.lineTo(r*.45,-r*.55);g.quadraticCurveTo(r*.78,-r*.55,r*.7,-r*.3);g.lineTo(r*.65,r*.45);g.quadraticCurveTo(r*.6,r*.6,r*.35,r*.6);g.lineTo(-r*.4,r*.6);g.quadraticCurveTo(-r*.68,r*.6,-r*.66,r*.35);g.closePath();g.fill();g.stroke();
   for(let i=0;i<6;i++){const xx=-r*.5+i*r*.2;g.beginPath();g.moveTo(xx,-r*.45);g.quadraticCurveTo(xx+r*.08,0,xx,r*.5);g.stroke();}
   return;}
+ if(p==='opalshell'){const t=ph*.8;const gr=g.createLinearGradient(-r*.8,-r*.5,r*.8,r*.6);gr.addColorStop(0,`hsl(${(t*40)%360},70%,75%)`);gr.addColorStop(.5,`hsl(${(t*40+120)%360},70%,78%)`);gr.addColorStop(1,`hsl(${(t*40+240)%360},70%,72%)`);
+  g.fillStyle=gr;g.strokeStyle='#8a7a5e';g.lineWidth=Math.max(.6,r*.05);g.beginPath();g.moveTo(0,r*.5);g.arc(0,r*.5,r*.9,-Math.PI*.88,-Math.PI*.12);g.closePath();g.fill();g.stroke();
+  g.strokeStyle='rgba(255,255,255,.55)';for(let i=1;i<6;i++){const a=-Math.PI*.88+i*(Math.PI*.76/6);g.beginPath();g.moveTo(0,r*.5);g.lineTo(Math.cos(a)*r*.88,r*.5+Math.sin(a)*r*.88);g.stroke();}shine(g,r*.7);return;}
+ if(p==='diproto'){g.fillStyle='#e9dfc6';g.strokeStyle='#9c8c6c';g.lineWidth=Math.max(.6,r*.05);g.beginPath();g.moveTo(-r*.7,r*.55);g.quadraticCurveTo(-r*.5,-r*.6,r*.55,-r*.8);g.lineTo(r*.75,-r*.6);g.quadraticCurveTo(-r*.1,-r*.25,-r*.3,r*.6);g.closePath();g.fill();g.stroke();
+  g.fillStyle='#c9b48a';g.beginPath();g.moveTo(-r*.7,r*.55);g.lineTo(-r*.3,r*.6);g.lineTo(-r*.4,r*.85);g.lineTo(-r*.75,r*.8);g.closePath();g.fill();g.stroke();
+  g.strokeStyle='rgba(150,130,95,.6)';g.beginPath();g.moveTo(-r*.45,r*.4);g.quadraticCurveTo(-r*.3,-r*.35,r*.6,-r*.68);g.stroke();return;}
+ if(p==='turtle'){g.fillStyle='#b5a283';g.strokeStyle='#7a6a4c';g.lineWidth=Math.max(.6,r*.05);g.beginPath();g.moveTo(-r*.85,r*.1);g.quadraticCurveTo(-r*.6,-r*.75,r*.2,-r*.7);g.lineTo(r*.85,-r*.1);g.lineTo(r*.55,r*.55);g.lineTo(-r*.4,r*.65);g.closePath();g.fill();g.stroke();
+  g.strokeStyle='rgba(80,65,45,.75)';for(const [x,y] of [[-.35,-.15],[.2,-.25],[.25,.3],[-.25,.35]]){g.beginPath();for(let k=0;k<6;k++){const a=k/6*Math.PI*2;const px=r*x+Math.cos(a)*r*.22,py=r*y+Math.sin(a)*r*.2;k?g.lineTo(px,py):g.moveTo(px,py);}g.closePath();g.stroke();}return;}
+ if(p==='opalbone'){const t=ph*.8;g.shadowColor='rgba(160,230,255,.85)';g.shadowBlur=r*.45;
+  const gr2=g.createLinearGradient(-r*.2,r*.1,r*.5,r*.9);gr2.addColorStop(0,`hsl(${(t*50+200)%360},80%,82%)`);gr2.addColorStop(1,`hsl(${(t*50+300)%360},75%,66%)`);g.fillStyle=gr2;g.beginPath();g.moveTo(-r*.05,r*.12);g.quadraticCurveTo(r*.55,r*.25,r*.45,r*.85);g.quadraticCurveTo(r*.1,r*.6,-r*.15,r*.2);g.fill();
+  for(let i=0;i<6;i++){const k=i/5,x=-r*.9+k*r*1.8,y=r*.25-k*r*.5-Math.sin(k*Math.PI)*r*.18;const gr=g.createRadialGradient(x-r*.06,y-r*.06,0,x,y,r*.26);gr.addColorStop(0,`hsl(${(t*50+i*55)%360},85%,88%)`);gr.addColorStop(.6,`hsl(${(t*50+i*55+90)%360},75%,68%)`);gr.addColorStop(1,`hsl(${(t*50+i*55+180)%360},70%,55%)`);g.fillStyle=gr;g.beginPath();g.ellipse(x,y,r*.17,r*.23,-.45,0,7);g.fill();}
+  g.shadowBlur=0;g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=Math.max(.6,r*.05);for(let i=0;i<6;i++){const k=i/5,x=-r*.9+k*r*1.8,y=r*.25-k*r*.5-Math.sin(k*Math.PI)*r*.18;g.beginPath();g.moveTo(x-r*.05,y-r*.2);g.lineTo(x-r*.12,y-r*.38);g.stroke();}
+  g.fillStyle='rgba(255,255,255,.55)';const tw=.5+.5*Math.sin(ph*1.6);g.beginPath();g.arc(r*.3,-r*.35,r*.05*tw+r*.02,0,7);g.fill();return;}
+ if(p==='spino'){g.save();g.rotate(-.35);const gr=g.createLinearGradient(-r*.3,0,r*.3,0);gr.addColorStop(0,'#8a6a44');gr.addColorStop(.5,'#d9c39a');gr.addColorStop(1,'#7a5a38');g.fillStyle=gr;g.strokeStyle='#5a4428';g.lineWidth=Math.max(.6,r*.05);
+  g.beginPath();g.moveTo(-r*.28,r*.8);g.quadraticCurveTo(-r*.3,-r*.2,0,-r*.95);g.quadraticCurveTo(r*.3,-r*.2,r*.28,r*.8);g.closePath();g.fill();g.stroke();
+  g.strokeStyle='rgba(90,68,40,.6)';g.lineWidth=Math.max(.4,r*.025);for(const x of[-.14,-.05,.05,.14]){g.beginPath();g.moveTo(r*x*1.6,r*.75);g.quadraticCurveTo(r*x,-r*.1,0,-r*.85);g.stroke();}
+  g.fillStyle='#4a3a28';g.fillRect(-r*.3,r*.72,r*.6,r*.16);g.restore();return;}
+ if(p==='coela'){g.shadowColor='rgba(120,200,255,.7)';g.shadowBlur=r*.4;const gr=g.createLinearGradient(-r,-r,r,r);gr.addColorStop(0,'#5a7aa8');gr.addColorStop(1,'#2e4468');g.fillStyle=gr;g.beginPath();g.moveTo(-r*.8,-r*.55);g.quadraticCurveTo(r*.1,-r*.95,r*.85,-r*.15);g.quadraticCurveTo(r*.6,r*.8,-r*.2,r*.75);g.quadraticCurveTo(-r*.95,r*.3,-r*.8,-r*.55);g.fill();g.shadowBlur=0;
+  g.fillStyle='rgba(230,240,255,.85)';for(let i=0;i<14;i++){const x=-r*.35+pr(i+3)*r*.95,y=-r*.35+pr(i+11)*r*.85;g.beginPath();g.ellipse(x,y,r*.05,r*.03,.5,0,7);g.fill();}
+  g.strokeStyle='rgba(200,225,255,.5)';g.lineWidth=Math.max(.5,r*.03);for(let i=1;i<4;i++){g.beginPath();g.ellipse(-r*.45,-r*.3,r*.3*i,r*.25*i,.6,-.2,1.5);g.stroke();}const tw=.5+.5*Math.sin(ph*1.5);g.fillStyle=`rgba(255,255,255,${.5*tw+.2})`;g.beginPath();g.arc(r*.4,-r*.3,r*.06,0,7);g.fill();return;}
+ if(p==='paki'){g.fillStyle='#e6dcc2';g.strokeStyle='#8a7a5a';g.lineWidth=Math.max(.6,r*.05);g.beginPath();g.moveTo(-r*.55,r*.2);g.lineTo(-r*.35,-r*.25);g.lineTo(-r*.2,-r*.05);g.lineTo(0,-r*.6);g.lineTo(r*.2,-r*.05);g.lineTo(r*.35,-r*.25);g.lineTo(r*.55,r*.2);g.closePath();g.fill();g.stroke();
+  g.fillStyle='#b89a6a';g.beginPath();g.moveTo(-r*.45,r*.2);g.lineTo(-r*.3,r*.75);g.lineTo(-r*.1,r*.2);g.moveTo(r*.1,r*.2);g.lineTo(r*.3,r*.75);g.lineTo(r*.45,r*.2);g.fill();return;}
+ if(p==='siva'){g.fillStyle='#d8c9a6';g.strokeStyle='#8a7550';g.lineWidth=Math.max(.6,r*.05);g.beginPath();g.moveTo(-r*.2,r*.85);g.lineTo(-r*.05,r*.1);g.quadraticCurveTo(-r*.7,-r*.1,-r*.85,-r*.55);g.lineTo(-r*.6,-r*.45);g.lineTo(-r*.55,-r*.8);g.lineTo(-r*.3,-r*.5);g.lineTo(-r*.05,-r*.85);g.lineTo(r*.1,-r*.45);g.lineTo(r*.4,-r*.75);g.lineTo(r*.45,-r*.35);g.lineTo(r*.8,-r*.45);g.quadraticCurveTo(r*.6,0,r*.12,r*.15);g.lineTo(r*.15,r*.85);g.closePath();g.fill();g.stroke();return;}
+ if(p==='raja'){g.fillStyle='#cdb892';g.strokeStyle='#7a6440';g.lineWidth=Math.max(.6,r*.05);g.beginPath();g.moveTo(-r*.75,r*.5);g.quadraticCurveTo(-r*.6,-r*.2,-r*.1,-r*.3);g.quadraticCurveTo(r*.1,-r*.75,r*.35,-r*.35);g.quadraticCurveTo(r*.8,-r*.2,r*.75,r*.5);g.closePath();g.fill();g.stroke();
+  g.fillStyle='#b8a078';g.beginPath();g.ellipse(r*.08,-r*.5,r*.18,r*.22,.2,0,7);g.fill();g.stroke();g.strokeStyle='rgba(120,95,60,.5)';for(let i=0;i<5;i++){g.beginPath();g.arc(-r*.4+i*r*.25,r*.3,r*.1,Math.PI,0);g.stroke();}return;}
+ if(p==='nest'){g.fillStyle='#b9a582';g.beginPath();g.ellipse(0,r*.15,r*.95,r*.62,0,0,7);g.fill();
+  for(const [x,y] of [[-.45,-.05],[0,-.15],[.45,-.05],[-.25,.3],[.25,.3]]){const gr=g.createRadialGradient(r*x-r*.06,r*y-r*.06,0,r*x,r*y,r*.26);gr.addColorStop(0,'#efe6d2');gr.addColorStop(1,'#a8987a');g.fillStyle=gr;g.beginPath();g.arc(r*x,r*y,r*.24,0,7);g.fill();g.strokeStyle='rgba(90,75,50,.5)';g.lineWidth=Math.max(.5,r*.03);g.beginPath();g.moveTo(r*x-r*.1,r*y-r*.05);g.lineTo(r*x,r*y+r*.02);g.lineTo(r*x+r*.12,r*y-r*.08);g.stroke();}
+  shine(g,r*.6);return;}
  // stone-based fossils
- const base={snakestone:'#9a8a70',leaf:'#bbb3a5',shell:'#c7bda9',ammo:'#9e8f78',wood:'#8f6d4b',fern:'#a9a493',fishfos:'#c9b896',conch:'#c2b59a',coralfos:'#d6cbb2',crinoid:'#a89a82'}[p]||'#bbb';
+ const base={snakestone:'#9a8a70',leaf:'#bbb3a5',shell:'#c7bda9',ammo:'#9e8f78',wood:'#8f6d4b',fern:'#a9a493',fishfos:'#c9b896',conch:'#c2b59a',coralfos:'#d6cbb2',crinoid:'#a89a82',strom:'#c2b08c',glosso:'#b9ae98',foot:'#bba684',trilo:'#c8b99c',copro:'#b8a88a',palm:'#c4b896'}[p]||'#bbb';
  g.save();blob(g,r,seed);g.fillStyle=base;g.fill();g.strokeStyle='rgba(0,0,0,.2)';g.lineWidth=Math.max(.6,r*.05);g.stroke();g.clip();
  g.lineWidth=Math.max(.6,r*.05);
+ if(p==='strom'){for(let i=0;i<6;i++){g.strokeStyle=i%2?'rgba(110,90,60,.6)':'rgba(240,230,205,.55)';g.lineWidth=Math.max(.6,r*.09);g.beginPath();g.ellipse(0,r*.75,r*(.25+i*.15),r*(.3+i*.17),0,Math.PI,0);g.stroke();}}
+ if(p==='glosso'){g.save();g.rotate(-.4);g.fillStyle='rgba(90,70,45,.45)';g.strokeStyle='#5f4c33';g.beginPath();g.moveTo(-r*.75,0);g.quadraticCurveTo(-r*.1,-r*.42,r*.75,-r*.05);g.quadraticCurveTo(-r*.1,r*.42,-r*.75,0);g.fill();g.stroke();
+  g.beginPath();g.moveTo(-r*.75,0);g.lineTo(r*.7,-r*.04);g.stroke();g.lineWidth=Math.max(.4,r*.02);for(let i=0;i<9;i++){const x=-r*.55+i*r*.13;g.beginPath();g.moveTo(x,0);g.lineTo(x+r*.12,-r*.2);g.moveTo(x,0);g.lineTo(x+r*.12,r*.2);g.stroke();}g.restore();}
+ if(p==='foot'){g.fillStyle='rgba(70,55,35,.55)';g.beginPath();g.ellipse(0,r*.25,r*.28,r*.3,0,0,7);g.fill();for(const a of[-.55,0,.55]){g.save();g.translate(0,r*.05);g.rotate(a);g.beginPath();g.ellipse(0,-r*.42,r*.11,r*.3,0,0,7);g.fill();g.restore();}}
+ if(p==='trilo'){g.fillStyle='#4a3f34';g.beginPath();g.ellipse(0,0,r*.45,r*.62,0,0,7);g.fill();g.fillStyle='#6a5a48';g.beginPath();g.ellipse(0,-r*.42,r*.45,r*.22,0,Math.PI,0);g.fill();
+  g.strokeStyle='rgba(200,180,150,.55)';g.lineWidth=Math.max(.5,r*.04);for(let i=0;i<8;i++){const y=-r*.25+i*r*.1;g.beginPath();g.moveTo(-r*.42*(1-i*.05),y);g.lineTo(r*.42*(1-i*.05),y);g.stroke();}
+  g.beginPath();g.moveTo(-r*.13,-r*.3);g.lineTo(-r*.1,r*.5);g.moveTo(r*.13,-r*.3);g.lineTo(r*.1,r*.5);g.stroke();g.fillStyle='#2a221a';g.beginPath();g.arc(-r*.22,-r*.45,r*.05,0,7);g.arc(r*.22,-r*.45,r*.05,0,7);g.fill();}
+ if(p==='copro'){g.fillStyle='rgba(110,80,45,.75)';for(let i=0;i<4;i++){g.beginPath();g.ellipse(-r*.4+i*r*.28,Math.sin(i)*r*.1,r*.22,r*.18,0,0,7);g.fill();}g.fillStyle='rgba(230,200,150,.35)';for(let i=0;i<8;i++){g.beginPath();g.arc((pr(seed+i)-.5)*r*1.2,(pr(seed+i+9)-.5)*r*.4,r*.03,0,7);g.fill();}}
+ if(p==='palm'){g.strokeStyle='rgba(80,70,45,.7)';g.lineWidth=Math.max(.5,r*.035);for(let i=0;i<9;i++){const a=-Math.PI*.9+i*(Math.PI*.8/8);g.beginPath();g.moveTo(0,r*.6);g.lineTo(Math.cos(a)*r*.85,r*.6+Math.sin(a)*r*.95);g.stroke();}g.beginPath();g.moveTo(0,r*.6);g.lineTo(0,r*.95);g.stroke();}
  if(p==='leaf'){g.save();g.rotate(-.5);g.fillStyle='rgba(115,85,55,.35)';g.strokeStyle='#7a6447';g.beginPath();g.ellipse(0,0,r*.6,r*.26,0,0,7);g.fill();g.stroke();g.beginPath();g.moveTo(-r*.6,0);g.lineTo(r*.6,0);for(let i=-2;i<=2;i++){g.moveTo(i*r*.18,0);g.lineTo(i*r*.18+r*.12,-r*.18);g.moveTo(i*r*.18,0);g.lineTo(i*r*.18+r*.12,r*.18);}g.stroke();g.restore();}
  if(p==='shell'){g.fillStyle='#e2d7c0';g.strokeStyle='#9d8c6e';g.beginPath();g.moveTo(0,r*.45);g.arc(0,r*.45,r*.85,-Math.PI*.85,-Math.PI*.15);g.closePath();g.fill();g.stroke();for(let i=1;i<6;i++){const a=-Math.PI*.85+i*(Math.PI*.7/6);g.beginPath();g.moveTo(0,r*.45);g.lineTo(Math.cos(a)*r*.85,r*.45+Math.sin(a)*r*.85);g.stroke();}}
  if(p==='wood'){g.strokeStyle='rgba(70,45,25,.55)';for(let i=1;i<5;i++){g.beginPath();g.ellipse(-r*.15,r*.05,r*.2*i,r*.13*i,.2,0,7);g.stroke();}g.strokeStyle='rgba(230,200,160,.35)';for(let i=0;i<4;i++){g.beginPath();g.moveTo(-r,(i-1.5)*r*.35);g.lineTo(r,(i-1.5)*r*.35+r*.1);g.stroke();}}
@@ -1019,14 +1344,34 @@ function iconCanvas(sp,px,sil){
 const cv=$('river'),ctx=cv.getContext('2d');
 let W=0,H=0,DPR=1,bg=null,Z=null,bankL=0,bankR=0,RS=1;
 const net={x:0,y:0,rx:40,ry:30};
+let flood=false,shade=null,shadeT=18000,lastSpook=0,zapFx=null;
 let comp=null,rain=false,waveV=0,bigWaveT=20000,shots=[],ents=[],items=[],mud=[],ripples=[],ghosts=[],glints=[],streaks=[];
 let tut=0,tutNoneT=0,pops=[],lastPop=0,readyPrev=false;
 let lifting=null,rockScrape=0,spawnT=0,glintT=0,lostT=0,homing=false,releaseQ=[],results=[];
 
 function buildZones(){
- const L2=S.stage===2,L3=S.stage===3,L4=S.stage===4,L5=S.stage===5,L6=S.stage===6;
- const z=a=>a.map(([x,y,r])=>({x:W*x,y:H*y,r:W*r}));
- Z=L6?{
+ const L2=S.stage===2,L3=S.stage===3,L4=S.stage===4,L5=S.stage===5,L6=S.stage===6,L7=S.stage===7,L8=S.stage===8,L9=S.stage===9;
+ const dk=L7?1-.11*(S.dry||0):1;
+ const z=a=>a.map(([x,y,r])=>({x:W*(.5+(x-.5)*dk),y:H*y,r:W*r*(L7?.92+.08*dk:1)}));
+ Z=L9?{
+  weed:z([[.2,.22,.1],[.8,.4,.1],[.22,.66,.1],[.78,.84,.09]]),
+  rock:z([[.62,.18,.06],[.36,.5,.055],[.66,.7,.055]]),
+  mud:z([[.42,.3,.1],[.58,.58,.11],[.4,.86,.08]]),
+  pool:z([[.5,.1,.14],[.5,.46,.13]]),
+  gravel:z([[.5,.76,.13],[.3,.38,.07]])
+ }:L8?{
+  weed:z([[.78,.62,.1],[.24,.82,.09]]),
+  rock:z([[.24,.14,.075],[.7,.24,.07],[.32,.44,.065],[.66,.5,.06],[.4,.72,.06],[.74,.86,.055]]),
+  mud:z([[.56,.36,.1],[.3,.62,.08]]),
+  pool:z([[.5,.12,.13],[.52,.62,.12]]),
+  gravel:z([[.46,.88,.13],[.22,.3,.07]])
+ }:L7?{
+  weed:z([[.24,.3,.11],[.76,.52,.11],[.26,.7,.09]]),
+  rock:z([[.66,.16,.06],[.36,.46,.06],[.7,.76,.055],[.3,.9,.05]]),
+  mud:z([[.58,.68,.12],[.4,.2,.08]]),
+  pool:z([[.5,.34,.16],[.56,.08,.11]]),
+  gravel:z([[.44,.58,.15],[.58,.9,.1]])
+ }:L6?{
   weed:z([[.22,.3,.12],[.78,.55,.12]]),
   rock:z([[.7,.2,.06],[.3,.62,.06],[.72,.86,.05]]),
   mud:z([[.3,.85,.1]]),
@@ -1063,7 +1408,7 @@ function buildZones(){
   pool:z([[.6,.33,.15],[.42,.1,.12]]),
   gravel:z([[.55,.56,.16],[.6,.86,.11]])
  };
- bankL=W*.08;bankR=W*.92;
+ bankL=W*.08;bankR=W*.92;if(L7){const d=S.dry||0;bankL=W*(.08+.045*d);bankR=W*(.92-.045*d);}
 }
 function inZone(t,x,y){return Z[t].some(z=>Math.hypot(x-z.x,y-z.y)<z.r);}
 function zonePt(t){const z=Z[t][Math.floor(Math.random()*Z[t].length)];const a=Math.random()*7,d=Math.sqrt(Math.random())*z.r*.8;return {x:clamp(z.x+Math.cos(a)*d,bankL+10,bankR-10),y:clamp(z.y+Math.sin(a)*d,10,H-10),z};}
@@ -1071,20 +1416,30 @@ function radial(g,z,col,sc){const gr=g.createRadialGradient(z.x,z.y,0,z.x,z.y,z.
 function buildBg(){
  bg=document.createElement('canvas');bg.width=Math.round(W*DPR);bg.height=Math.round(H*DPR);
  const g=bg.getContext('2d');g.scale(DPR,DPR);
- const T2=S.stage===2,T3=S.stage===3,T4=S.stage===4,T5=S.stage===5,T6=S.stage===6;let gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,T6?'#1c1d4e':T5?'#7ab8a8':T4?'#2f7fae':T3?'#86d0c8':T2?'#7fae92':'#70b6aa');gr.addColorStop(1,T6?'#0d0e2c':T5?'#4e8f80':T4?'#8fd6cf':T3?'#4fa5a0':T2?'#58876c':'#4f998f');g.fillStyle=gr;g.fillRect(0,0,W,H);
+ const T2=S.stage===2,T3=S.stage===3,T4=S.stage===4,T5=S.stage===5,T6=S.stage===6,T7=S.stage===7,T8=S.stage===8,T9=S.stage===9;let gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,T9?(flood?'#9c8a62':'#8fa07a'):T8?'#6cbcc0':T7?'#93a98a':T6?'#1c1d4e':T5?'#7ab8a8':T4?'#2f7fae':T3?'#86d0c8':T2?'#7fae92':'#70b6aa');gr.addColorStop(1,T9?(flood?'#6a5636':'#55664a'):T8?'#2c7f98':T7?'#5f7a5a':T6?'#0d0e2c':T5?'#4e8f80':T4?'#8fd6cf':T3?'#4fa5a0':T2?'#58876c':'#4f998f');g.fillStyle=gr;g.fillRect(0,0,W,H);
  Z.pool.forEach(z=>radial(g,z,'rgba(25,75,85,.32)',1.15));
  Z.gravel.forEach(z=>{for(let i=0;i<z.r*z.r/14;i++){const a=Math.random()*7,d=Math.sqrt(Math.random())*z.r;g.fillStyle=['#b9ad92','#a39a86','#cfc4a8','#8f8676'][i%4];g.globalAlpha=.55;g.beginPath();g.ellipse(z.x+Math.cos(a)*d,z.y+Math.sin(a)*d,rnd(1.2,3.2),rnd(1,2.4),Math.random()*3,0,7);g.fill();}g.globalAlpha=1;});
- Z.mud.forEach(z=>{radial(g,z,T6?'rgba(120,80,200,.45)':T4?'rgba(232,218,172,.55)':T3?'rgba(170,140,95,.6)':T2?'rgba(140,72,40,.6)':'rgba(105,78,45,.6)',1.1);for(let i=0;i<60;i++){const a=Math.random()*7,d=Math.sqrt(Math.random())*z.r*.9;g.fillStyle=T6?'rgba(220,200,255,.35)':T4?'rgba(190,170,120,.35)':'rgba(80,58,32,.25)';g.beginPath();g.arc(z.x+Math.cos(a)*d,z.y+Math.sin(a)*d,rnd(1,3),0,7);g.fill();}});
+ Z.mud.forEach(z=>{radial(g,z,T9?'rgba(110,85,50,.5)':T8?'rgba(90,80,60,.5)':T7?'rgba(150,72,40,.55)':T6?'rgba(120,80,200,.45)':T4?'rgba(232,218,172,.55)':T3?'rgba(170,140,95,.6)':T2?'rgba(140,72,40,.6)':'rgba(105,78,45,.6)',1.1);for(let i=0;i<60;i++){const a=Math.random()*7,d=Math.sqrt(Math.random())*z.r*.9;g.fillStyle=T6?'rgba(220,200,255,.35)':T4?'rgba(190,170,120,.35)':'rgba(80,58,32,.25)';g.beginPath();g.arc(z.x+Math.cos(a)*d,z.y+Math.sin(a)*d,rnd(1,3),0,7);g.fill();}});
  Z.weed.forEach(z=>{radial(g,z,'rgba(60,110,50,.35)');g.lineCap='round';for(let i=0;i<z.r*1.1;i++){const a=Math.random()*7,d=Math.sqrt(Math.random())*z.r*.9;const x=z.x+Math.cos(a)*d,y=z.y+Math.sin(a)*d;g.strokeStyle=T6?['#4ad0c8','#7ae0d0','#5a9ae0'][i%3]:T4?['#8a5a2e','#a86a3a','#6f7a3a'][i%3]:['#4f8a3c','#68a24c','#3f7432'][i%3];g.lineWidth=rnd(1.5,3);g.beginPath();g.moveTo(x,y);g.quadraticCurveTo(x+rnd(-8,8),y+rnd(6,14),x+rnd(-10,10),y+rnd(14,26));g.stroke();}});
  Z.rock.forEach(z=>{g.fillStyle='rgba(20,40,40,.25)';g.beginPath();g.ellipse(z.x+3,z.y+5,z.r,z.r*.78,0,0,7);g.fill();
-  const rg=g.createRadialGradient(z.x-z.r*.3,z.y-z.r*.3,0,z.x,z.y,z.r);rg.addColorStop(0,T6?'#4a3a7a':T4?'#9a9690':T3?'#dcc193':T2?'#8f857a':'#b4b0a6');rg.addColorStop(1,T6?'#241a44':T4?'#5a5752':T3?'#a6845a':T2?'#544c45':'#77736a');g.fillStyle=rg;g.beginPath();g.ellipse(z.x,z.y,z.r,z.r*.78,.2,0,7);g.fill();
+  const rg=g.createRadialGradient(z.x-z.r*.3,z.y-z.r*.3,0,z.x,z.y,z.r);rg.addColorStop(0,T9?'#6a6a6e':T8?'#b8b2a8':T7?'#cf9058':T6?'#4a3a7a':T4?'#9a9690':T3?'#dcc193':T2?'#8f857a':'#b4b0a6');rg.addColorStop(1,T9?'#2e2e32':T8?'#5e5a56':T7?'#7e4a28':T6?'#241a44':T4?'#5a5752':T3?'#a6845a':T2?'#544c45':'#77736a');g.fillStyle=rg;g.beginPath();g.ellipse(z.x,z.y,z.r,z.r*.78,.2,0,7);g.fill();
   g.fillStyle='rgba(120,150,90,.35)';g.beginPath();g.ellipse(z.x+z.r*.2,z.y-z.r*.25,z.r*.35,z.r*.18,0,0,7);g.fill();});
  for(const side of[0,1]){
-  g.fillStyle=T6?'#2a1f4a':T5?'#8cbf5a':T4?(side?'#ead7a4':'#8c8a84'):T3?'#e6cc92':T2?'#b8713f':'#7ea65c';g.beginPath();const ex=side?bankR:bankL,ox=side?W:0;g.moveTo(ox,0);
+  g.fillStyle=T9?'#b89668':T8?'#dcc79a':T7?'#c4673a':T6?'#2a1f4a':T5?'#8cbf5a':T4?(side?'#ead7a4':'#8c8a84'):T3?'#e6cc92':T2?'#b8713f':'#7ea65c';g.beginPath();const ex=side?bankR:bankL,ox=side?W:0;g.moveTo(ox,0);
   for(let y=0;y<=H;y+=12){g.lineTo(ex+Math.sin(y*.04+side*2)*5,y);}g.lineTo(ox,H);g.closePath();g.fill();
-  g.strokeStyle=T6?'#6a4ab0':T5?'#6a9a44':T4?(side?'#cdb57e':'#64625d'):T3?'#c9a86a':T2?'#8d5230':'#5d8443';g.lineWidth=3;g.beginPath();for(let y=0;y<=H;y+=12){const x=ex+Math.sin(y*.04+side*2)*5;y?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();
-  for(let i=0;i<H/14;i++){const y=rnd(0,H),x=side?rnd(bankR+6,W):rnd(0,bankL-6);g.strokeStyle=T4?(side?(i%2?'#cdb57e':'#f6e6be'):(i%2?'#6f6d68':'#a8a6a0')):T3?(i%2?'#c9a86a':'#f0dcaa'):(i%2?'#5f8b44':'#93bb6d');g.lineWidth=1.5;g.beginPath();g.moveTo(x,y);g.lineTo(x+rnd(-3,3),y-rnd(4,9));g.stroke();}
+  g.strokeStyle=T9?'#8a6a40':T8?'#a8905e':T7?'#9a4a26':T6?'#6a4ab0':T5?'#6a9a44':T4?(side?'#cdb57e':'#64625d'):T3?'#c9a86a':T2?'#8d5230':'#5d8443';g.lineWidth=3;g.beginPath();for(let y=0;y<=H;y+=12){const x=ex+Math.sin(y*.04+side*2)*5;y?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();
+  for(let i=0;i<H/14;i++){const y=rnd(0,H),x=side?rnd(bankR+6,W):rnd(0,bankL-6);g.strokeStyle=T9?(i%2?'#5f9a3a':'#8ab84a'):T8?(i%2?'#b8a560':'#8a9a50'):T7?(i%2?'#a89a5a':'#dcc47e'):T4?(side?(i%2?'#cdb57e':'#f6e6be'):(i%2?'#6f6d68':'#a8a6a0')):T3?(i%2?'#c9a86a':'#f0dcaa'):(i%2?'#5f8b44':'#93bb6d');g.lineWidth=1.5;g.beginPath();g.moveTo(x,y);g.lineTo(x+rnd(-3,3),y-rnd(4,9));g.stroke();}
  }
+ if(T7){const d=S.dry||0;if(d>0){for(const side of[0,1]){const ex=side?bankR:bankL;g.strokeStyle='rgba(120,60,30,.45)';g.lineWidth=1;for(let i=0;i<d*14;i++){const x=side?ex+rnd(4,W*.045*d):ex-rnd(4,W*.045*d),y=rnd(0,H);g.beginPath();g.moveTo(x,y);g.lineTo(x+rnd(-6,6),y+rnd(-6,6));g.lineTo(x+rnd(-6,6),y+rnd(-6,6));g.stroke();}}}
+  for(let i=0;i<4;i++){const side=i%2,x=side?W-W*.04:W*.04,y=H*(.12+i*.24);g.save();g.translate(x,y);g.fillStyle='rgba(60,30,15,.22)';g.beginPath();g.ellipse(5,7,24,13,0,0,7);g.fill();
+   for(let k=0;k<9;k++){const a=k/9*Math.PI*2;g.fillStyle=['#7f9a6a','#a3b48a','#6b8758'][k%3];g.beginPath();g.ellipse(Math.cos(a)*13,Math.sin(a)*11,11,7,a,0,7);g.fill();}
+   g.fillStyle='#ece6da';g.beginPath();g.arc(0,0,4.5,0,7);g.fill();g.strokeStyle='#bdb3a2';g.lineWidth=1;g.stroke();g.restore();}}
+
+
+ if(T9){for(const z of Z.weed){for(let i=0;i<4;i++){const x=z.x+rnd(-z.r*.7,z.r*.7),y=z.y+rnd(-z.r*.6,z.r*.6);g.fillStyle='rgba(70,120,50,.85)';g.beginPath();g.arc(x,y,rnd(9,14),.3,Math.PI*2-.1);g.lineTo(x,y);g.fill();g.strokeStyle='rgba(40,80,30,.6)';g.lineWidth=1;g.stroke();}
+   const x=z.x+rnd(-z.r*.4,z.r*.4),y=z.y+rnd(-z.r*.4,z.r*.4);for(let k=0;k<8;k++){const a=k/8*6.28;g.fillStyle=k%2?'#f2a6c4':'#e67fa8';g.beginPath();g.ellipse(x+Math.cos(a)*5,y+Math.sin(a)*5,6,3,a,0,7);g.fill();}g.fillStyle='#f6d860';g.beginPath();g.arc(x,y,3,0,7);g.fill();}}
+ if(T8){for(let i=0;i<5;i++){const side=i%2,x=side?W-W*.035:W*.035,y=H*(.1+i*.2);g.fillStyle='rgba(60,50,30,.18)';g.beginPath();g.ellipse(x+4,y+6,16,9,0,0,7);g.fill();g.fillStyle=['#8a9a50','#6f8440'][i%2];g.beginPath();g.ellipse(x,y,15,8,.3,0,7);g.fill();}
+  if(S.time===2){g.fillStyle='rgba(90,70,40,.35)';for(let i=0;i<26;i++){const side=i%2,x=side?bankR+rnd(6,W-bankR-8):rnd(6,bankL-6),y=rnd(10,H-10);g.beginPath();g.ellipse(x,y,3.2,2.4,0,0,7);g.fill();g.beginPath();g.ellipse(x+5,y+3,3.2,2.4,0,0,7);g.fill();}}}
  if(T6){for(let i=0;i<120;i++){g.fillStyle=`rgba(255,255,255,${rnd(.2,.9)})`;g.beginPath();g.arc(rnd(bankL,bankR),rnd(0,H),rnd(.4,1.4),0,7);g.fill();}
   for(let i=0;i<10;i++){const side=i%2,x=side?rnd(bankR+6,W-4):rnd(4,bankL-6),y=rnd(0,H);g.fillStyle=['#8a6ad6','#4ad0c8','#c08af0'][i%3];g.shadowColor=g.fillStyle;g.shadowBlur=8;g.beginPath();g.moveTo(x,y-9);g.lineTo(x+4,y);g.lineTo(x,y+5);g.lineTo(x-4,y);g.closePath();g.fill();g.shadowBlur=0;}}
  if(T5){for(const side of[0,1]){const x0=side?bankR+10:4,x1=side?W-4:bankL-10;for(let y=6;y<H;y+=11){for(let x=x0;x<x1;x+=12){g.fillStyle=['#b7ad98','#a59c88','#c4baa4'][(x+y)%3];g.fillRect(x+((y/11)%2?6:0)-6,y,10,8);}}}
@@ -1116,8 +1471,8 @@ function sizeNet(){net.rx=W*ND().rx*(1+.05*CN().lv.frame);net.ry=Math.max(24,H*.
 function inNet(x,y,k){k=k||1;const dx=(x-net.x)/(net.rx*k),dy=(y-net.y)/(net.ry*k);return dx*dx+dy*dy<=1;}
 
 function pick(kindFn){
- const pool=SPECIES.filter(s=>s.st===S.stage&&kindFn(s)&&(!s.time||s.time.includes(S.time)));
- const rich=1+S.richness/40;let tot=0;const w=pool.map(s=>{const v=(s.r===6?(S.dex[s.id]?.35:2.2*(SPECIES.filter(x=>x.st===s.st&&S.dex[x.id]).length>=20?2:1)):WEIGHT[s.r])*(s.r>=3?rich:1)*(s.kind==='fossil'&&spOn('shinchu')?2:1);tot+=v;return v;});
+ const pool=SPECIES.filter(s=>s.st===S.stage&&kindFn(s)&&(!s.time||s.time.includes(S.time))&&(!s.flood||flood));
+ const rich=1+S.richness/40;let tot=0;const w=pool.map(s=>{const v=(s.r===6&&!FRAGS.includes(s.id)?(S.dex[s.id]?.3:.6):s.r===6?(S.dex[s.id]?.35:2.2*(SPECIES.filter(x=>x.st===s.st&&S.dex[x.id]).length>=20?2:1)):WEIGHT[s.r])*(s.r>=3?rich:1)*(s.kind==='fossil'&&spOn('shinchu')?2:1)*(s.id==='kamonohashi'?(S.dex[s.id]?4:8):s.id==='gavial'?(S.dex[s.id]?3:5):1);tot+=v;return v;});
  let x=Math.random()*tot;for(let i=0;i<pool.length;i++){x-=w[i];if(x<=0)return pool[i];}return pool[0];
 }
 function mkEnt(sp,x,y){return {sp,x,y,vx:0,vy:0,hx:x,hy:y,ang:Math.random()*7,phase:Math.random()*7,state:'idle',t:0,reveal:0,cool:0,dart:0,calm:0,rock:0,seed:Math.floor(Math.random()*999)};}
@@ -1133,7 +1488,9 @@ function spawnItem(){
  const p=zonePt(sp.kind==='fossil'&&Math.random()<.35?'mud':'gravel');
  items.push({sp,x:p.x,y:p.y,hx:p.x,hy:p.y,vx:0,vy:0,buried:true,seed:Math.floor(Math.random()*999),ph:Math.random()*7});
 }
-function newOuting(){
+function newOuting(go){
+ if(S.stage===9){if(go)flood=Math.random()<.35;}else flood=false;
+ let r7=false;if(S.stage===7&&go){r7=Math.random()<.3;S.dry=r7?0:Math.min(3,(S.dry||0)+1);}
  sizeNet();buildZones();buildBg();
  ents=[];items=[];mud=[];ghosts=[];glints=[];rockScrape=0;homing=false;
  while(ents.length<9)spawnEnt();
@@ -1142,7 +1499,9 @@ function newOuting(){
  for(let i=0;i<6;i++)spawnItem();
  hud();
  toast(L('{0}日目 {1}・{2}',S.day,TM(S.time),stN(S.stage)));
- rain=S.stage===5&&Math.random()<.45;if(rain)setTimeout(()=>toast('雨が降ってきた。流れが速くなって、石がよく流れてくる'),2400);
+ rain=S.stage===5&&Math.random()<.45||r7||flood;if(S.stage===9&&go)setTimeout(()=>toast(flood?'モンスーンで増水!上から生き物が流れてくる':'今日の川は穏やか。ハスの花が咲いている'),2400);if(S.stage===7&&go)setTimeout(()=>toast(r7?'雨が降って、ビラボンに水が戻った':S.dry>=2?'日照りが続いて、水場がせまくなってきた':'日差しが強い。少しずつ水が減っていく'),2400);
+ if(S.stage===7&&(S.time===0||S.time===2)&&!S.dex.kamonohashi&&Math.random()<.5)setTimeout(()=>toast('朝と夕方には、カモノハシが現れることがあるらしい'),5200);
+ if(rain&&S.stage===5)setTimeout(()=>toast('雨が降ってきた。流れが速くなって、石がよく流れてくる'),2400);
  if(S.stage===3&&S.time===1)setTimeout(()=>toast('暑い…昼の砂漠は体力の減りが早い'),2400);
  if(S.stage===3&&S.time===3)setTimeout(()=>toast('夜の砂漠は涼しくて、体力が減りにくい'),2400);
  if(!S.tutDone)startTut();
@@ -1182,7 +1541,7 @@ function addMud(x,y,n){for(let i=0;i<n;i++){if(mud.length>170)mud.shift();mud.pu
 function swipe(x0,y0,x1,y1,dt){
  const dx=x1-x0,dy=y1-y0,d=Math.hypot(dx,dy);if(d<1.5)return;
  const fast=d/dt>1.1,ux=dx/d,uy=dy/d,now=performance.now();
- S.stamina=Math.max(0,S.stamina-d*.0096*ND().sta*(1-.06*CN().lv.grip)*(spOn('yashi')?.7:1)*(S.stage===3?[1,1.2,1,.9][S.time]:1));
+ S.stamina=Math.max(0,S.stamina-d*.0096*ND().sta*(1-.06*CN().lv.grip)*(spOn('yashi')?.7:1)*(S.stage===3?[1,1.2,1,.9][S.time]:1)*(spOn('yukari')&&S.stage===7?1-.15*(S.dry||0):1));
  if(!lastRip||Math.hypot(x1-lastRip.x,y1-lastRip.y)>16){ripples.push({x:x1,y:y1,t:0,big:fast});lastRip={x:x1,y:y1};}
  if(now-lastSwish>(fast?70:150)){sfx.swish(fast);lastSwish=now;}
  if(fast){
@@ -1190,6 +1549,7 @@ function swipe(x0,y0,x1,y1,dt){
   for(const it of items)if(it.buried&&segDist(it.x,it.y,x0,y0,x1,y1)<42&&Math.random()<.5){it.buried=false;it.vx=rnd(-.03,.03);it.vy=.015;addMud(it.x,it.y,3);}
   if(now-lastScrape>300&&Z.rock.some(k=>segDist(k.x,k.y,x0,y0,x1,y1)<k.r)){rockScrape++;lastScrape=now;}
  }
+ if(shade&&shade.t>600&&!spOn('sisal')&&now-lastSpook>900){lastSpook=now;for(const e of ents){if(['hide','dive','burrow','shell'].includes(e.state))continue;const ddx=e.x-x1,ddy=e.y-y1,dd=Math.hypot(ddx,ddy)||1;if(dd<190){e.vx+=ddx/dd*.38;e.vy+=ddy/dd*.38;e.dart=300;}}for(let i=0;i<4;i++)ripples.push({x:shade.x+rnd(-40,40),y:shade.y+rnd(-20,20),t:0,big:true});sfx.splash();toast(shade.kind==='hippo'?'カバがびっくりして、水が大きく揺れた!':'ワニがびっくりして、水が大きく揺れた!');}
  const R=78;
  for(const e of ents){
   if(e.state==='hide'){const k=Z.rock[e.rock];if(segDist(k.x,k.y,x0,y0,x1,y1)<k.r+14){e.state='idle';e.calm=0;const c=closest(e.x,e.y,x0,y0,x1,y1);react(e,c.x,c.y,ux,uy,fast,1);}continue;}
@@ -1201,6 +1561,7 @@ function swipe(x0,y0,x1,y1,dt){
 }
 function react(e,px,py,ux,uy,fast,f){
  let ax=e.x-px,ay=e.y-py;const d=Math.hypot(ax,ay)||1;ax/=d;ay/=d;
+ if(e.stun>0&&fast)return;
  const k=inNet(e.x,e.y)?.45:1;e.calm=0;
  const push=m=>{if(fast){e.vx+=(ax*.75+rnd(-.35,.35))*.42*f*k*m;e.vy+=(ay*.75+rnd(-.35,.35))*.42*f*k*m;}else{e.vx+=(ux*.7+ax*.3)*.2*f*k*m;e.vy+=(uy*.7+ay*.3)*.2*f*k*m;}};
  switch(e.sp.beh){
@@ -1209,6 +1570,9 @@ function react(e,px,py,ux,uy,fast,f){
   case 'crab':e.vx+=(ax>=0?1:-1)*.34*f*k+ux*.05;e.vy+=ay*.05*f;return;
   case 'egg':e.vx+=ux*.07*f;e.vy+=uy*.07*f;return;
   case 'shadow':if(!fast)e.reveal=4500;push(1);return;
+  case 'puff':if(fast&&f>.2){e.stun=2200;return;}push(.9);return;
+  case 'shock':if(fast&&f>.25&&!(e.zc>0)){e.zc=4500;zapFx={x:e.x,y:e.y,t:450};for(const o of ents){if(Math.hypot(o.x-e.x,o.y-e.y)<135)o.stun=o===e?700:1600;}sfx.tick();toast('ビリッ!まわりの生き物がしびれた');return;}push(.7);return;
+  case 'dive':if(e.state==='dive')return;if(fast&&f>.2){e.state='dive';e.t=1800;const p=zonePt('pool');e.nx=p.x;e.ny=p.y;e.vx=e.vy=0;ripples.push({x:e.x,y:e.y,t:300,big:true});sfx.drip();toast('カモノハシが水にもぐった!');return;}push(.8);return;
   case 'shell':if(e.state!=='shell'){e.state='shell';e.t=3200;e.vx=e.vy=0;}return;
   case 'cling':e.vx+=ux*.05*f;e.vy+=uy*.05*f;return;
   case 'ink':if(e.cool<=0){e.cool=1500;for(let i=0;i<10;i++){if(mud.length>170)mud.shift();mud.push({x:e.x+rnd(-12,12),y:e.y+rnd(-12,12),r:rnd(10,20),a:rnd(.55,.75),vx:rnd(-.02,.02),vy:rnd(-.01,.01),life:rnd(2200,3200),t:0,ink:true});}}e.vx+=ax*.6*f*k;e.vy+=ay*.6*f*k;return;
@@ -1236,7 +1600,7 @@ function doLift(){
  sfx.splash();
  const caught=[];let esc=0;
  ents=ents.filter(e=>{
-  if(e.state==='hide'||!inNet(e.x,e.y))return true;
+  if(e.state==='hide'||e.state==='dive'||!inNet(e.x,e.y))return true;
   let p=.04*e.sp.r*(e.state==='burrow'?.3:1)*(e.sp.beh==='fast'?1.6:1)*ND().esc*(1-.08*CN().lv.handle);
   const t=CN().t,b=e.sp.beh;
   if(t==='fine'&&e.sp.size<=14)p*=.4;
@@ -1274,7 +1638,7 @@ function finishLift(){
 
 /* ---------- results ---------- */
 function checkUnlock(quiet){
- for(let i=2;i<=MAXST;i++){if(S.unlocked.includes(i))continue;const n=SPECIES.filter(x=>x.st===i-1&&S.dex[x.id]).length;
+ for(let k=1;k<ORDER.length;k++){const i=ORDER[k];if(S.unlocked.includes(i))continue;const n=SPECIES.filter(x=>x.st===ORDER[k-1]&&S.dex[x.id]).length;
   if(n>=UNLOCK2){S.unlocked.push(i);save();if(!quiet)setTimeout(()=>{toast(L('新しい行き先「{0}」が開いた!',stN(i)));sfx.chime();},1600);}}
 }
 function openResults(caught){
@@ -1290,7 +1654,7 @@ function openResults(caught){
   const rec={sp,decided:false,acts,bShow:null};const life=sp.kind==='life';
   const mk=(cls,label,act)=>{const b=document.createElement('button');b.className=cls;b.textContent=label;b.onclick=()=>decide(rec,act);acts.appendChild(b);return b;};
   rec.bShow=mk('b-show',L(life?'水槽へ':'展示棚へ'),'show');
-  mk('b-sell',L('換える +{0}pt',VAL[sp.r]),'sell');
+  mk('b-sell',L('換える +{0}pt',V(sp)),'sell');
   if(life)mk('b-free',L(PL(sp)+'に返す'),'free');
   info.appendChild(acts);card.appendChild(info);box.appendChild(card);results.push(rec);
  });
@@ -1307,8 +1671,8 @@ function refreshResults(){
 function decide(r,act){
  if(r.decided)return;const sp=r.sp;let msg='';
  if(act==='show'){if(sp.kind==='life'){if(S.tank.length>=S.tankCap)return;S.tank.push(sp.id);msg=L('水槽に入れた');}else{if(S.shelf.length>=S.shelfCap)return;S.shelf.push(sp.id);msg=L('展示棚に並べた');}}
- else if(act==='sell'){S.points+=VAL[sp.r];msg=L('{0}pt に換えた',VAL[sp.r]);}
- else{const g=Math.max(1,Math.round(VAL[sp.r]*.2)),rb=sp.r+(sp.bonus||0);S.points+=g;S.richness=Math.min(100,S.richness+rb);msg=L(PL(sp)+'に返した(+{0}pt・豊かさ+{1})',g,rb);releaseQ.push(sp);S.freed++;}
+ else if(act==='sell'){S.points+=V(sp);msg=L('{0}pt に換えた',V(sp));}
+ else{const g=Math.max(1,Math.round(V(sp)*.2)),rb=sp.r+(sp.bonus||0);S.points+=g;S.richness=Math.min(100,S.richness+rb);msg=L(PL(sp)+'に返した(+{0}pt・豊かさ+{1})',g,rb);releaseQ.push(sp);S.freed++;}
  r.decided=true;r.acts.innerHTML=`<div class="done">${msg}</div>`;sfx.tick();hud();refreshResults();save();
 }
 $('sellAll').onclick=()=>results.filter(r=>!r.decided).forEach(r=>decide(r,'sell'));
@@ -1568,7 +1932,7 @@ function openDoor(){
 
 /* ---------- home ---------- */
 function income(){
- let raw=0;for(const id of S.tank.concat(S.shelf))raw+=Math.max(1,Math.round(VAL[SPM[id].r]*.15));
+ let raw=0;for(const id of S.tank.concat(S.shelf))raw+=Math.max(1,Math.round(V(SPM[id])*.15));
  const base=Math.round(raw*MUS[S.museum].mul);
  const netc=S.museum>=2?S.nets.reduce((a,n)=>a+2+n.patch+(n.fam>=FAM_NEED?3:0),0):0;
  const drag=S.endA?100:0;const sets=SETS.filter(setDone);return {base,sets,netc,drag,total:base+netc+drag+sets.reduce((a,s)=>a+s.bonus,0)};
@@ -1600,10 +1964,10 @@ function goHome(reason){
 }
 function renderStages(){
  const sel=$('stSel');sel.innerHTML='';
- [1,2,3,4,5].forEach(i=>{const open=S.unlocked.includes(i),b=document.createElement('button');b.className='strow'+(S.stage===i?' on':'');
-  let sub='';if(!open){sub=i<=MAXST?L('Stage {0}の図鑑を{1}種集めると開く(今 {2}種)',i-1,UNLOCK2,SPECIES.filter(x=>x.st===i-1&&S.dex[x.id]).length):L('準備中');}
+ ORDER.forEach((i,k)=>{const open=S.unlocked.includes(i),b=document.createElement('button');b.className='strow'+(S.stage===i?' on':'');const pv=ORDER[k-1];
+  let sub='';if(!open){sub=L('Stage {0}の図鑑を{1}種集めると開く(今 {2}種)',DN(pv),UNLOCK2,SPECIES.filter(x=>x.st===pv&&S.dex[x.id]).length);}
   else{const all=SPECIES.filter(x=>x.st===i),got=all.filter(x=>S.dex[x.id]).length;sub=L('図鑑 {0}/{1}',got,all.length);}
-  b.innerHTML=`<b>Stage ${i}</b> ${open?stN(i):'？？？'}<br><small>${sub}</small>`;b.disabled=!open;
+  b.innerHTML=`<b>Stage ${DN(i)}</b> ${open?stN(i):'？？？'}<br><small>${sub}</small>`;b.disabled=!open;
   b.onclick=()=>{S.stage=i;save();renderStages();};sel.appendChild(b);});
  if(S.door){const b=document.createElement('button');b.className='strow'+(S.stage===6?' on':'');const all=SPECIES.filter(x=>x.st===6),got=all.filter(x=>S.dex[x.id]).length;b.innerHTML=`<b>${L('ボーナス')}</b> ${stN(6)}<br><small>${L('図鑑 {0}/{1}',got,all.length)}${S.egg?'':(S.eggCool>0?'':' ・ '+L('卵が待っている'))}</small>`;b.onclick=()=>{S.stage=6;save();renderStages();};sel.appendChild(b);}
  requestAnimationFrame(drawMap);
@@ -1612,14 +1976,14 @@ function drawMap(){
  const c=$('mapCv');if(!c)return;const w=c.clientWidth||320,h=c.clientHeight||110;c.width=Math.round(w*DPR);c.height=Math.round(h*DPR);const g=c.getContext('2d');g.setTransform(DPR,0,0,DPR,0,0);
  g.fillStyle='#cfe6ec';g.fillRect(0,0,w,h);
  g.fillStyle='#e8dcb8';[[.02,.05,.22,.35],[.2,.25,.38,.3],[.38,.15,.6,.55],[.55,.35,.72,.7],[.8,.2,.93,.62]].forEach(([a,b,c2,d])=>{g.beginPath();g.ellipse(w*(a+c2)/2,h*(b+d)/2,w*(c2-a)/2,h*(d-b)/2,0,0,7);g.fill();});
- const pts=[1,2,3,4,5].map(i=>[STG[i].x*w,STG[i].y*h]);
+ const pts=ORDER.map(i=>[STG[i].x*w,STG[i].y*h]);
  g.strokeStyle='rgba(120,90,60,.6)';g.setLineDash([4,4]);g.lineWidth=2;g.beginPath();pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.stroke();g.setLineDash([]);
- pts.forEach(([x,y],k)=>{const i=k+1,open=S.unlocked.includes(i);g.fillStyle=open?(S.stage===i?'#de7a35':'#5e9a4a'):'#b7b0a2';g.beginPath();g.arc(x,y,S.stage===i?9:7,0,7);g.fill();
-  g.fillStyle='#fff';g.font='bold 9px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(open?String(i):'?',x,y+.5);});
+ pts.forEach(([x,y],k)=>{const i=ORDER[k],open=S.unlocked.includes(i);g.fillStyle=open?(S.stage===i?'#de7a35':'#5e9a4a'):'#b7b0a2';g.beginPath();g.arc(x,y,S.stage===i?9:7,0,7);g.fill();
+  g.fillStyle='#fff';g.font='bold 9px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(open?String(DN(i)):'?',x,y+.5);});
  const dx=w*.93,dy=h*.86;if(S.door){const gr=g.createRadialGradient(dx,dy,0,dx,dy,16);gr.addColorStop(0,'rgba(190,160,255,.8)');gr.addColorStop(1,'rgba(190,160,255,0)');g.fillStyle=gr;g.beginPath();g.arc(dx,dy,16,0,7);g.fill();}
  g.fillStyle=S.door?(S.stage===6?'#de7a35':'#7a5ad0'):'rgba(120,90,180,.35)';g.beginPath();g.arc(dx,dy,S.stage===6?9:7,0,7);g.fill();g.fillStyle='#fff';g.fillText(S.door?'★':'?',dx,dy+.5);
 }
-$('goOut').onclick=()=>{closeSheet('homeSheet');newOuting();};
+$('goOut').onclick=()=>{closeSheet('homeSheet');newOuting(true);};
 
 /* ---------- tank ---------- */
 let tankFish=[],tankOn=false;
@@ -1687,8 +2051,8 @@ function renderTank(){
  $('tankBody').innerHTML=h;
  const row=(list,arr,i,life)=>{const id=arr[i],sp=SPM[id];const d=document.createElement('div');d.className='trow';d.appendChild(iconCanvas(sp,40));
   const n=document.createElement('div');n.className='nm';n.innerHTML=`${nm(sp)} <span class="stars">${stars(sp.r)}</span>`;d.appendChild(n);
-  const b=document.createElement('button');b.className='sm b-sell';b.textContent=L('換える +{0}',VAL[sp.r]);b.onclick=()=>{arr.splice(i,1);S.points+=VAL[sp.r];sfx.tick();save();hud();renderTank();};d.appendChild(b);
-  if(life){const f=document.createElement('button');f.className='sm b-free';f.textContent=L('返す');f.onclick=()=>{arr.splice(i,1);const g=Math.max(1,Math.round(VAL[sp.r]*.2)),rb=sp.r+(sp.bonus||0);S.points+=g;S.richness=Math.min(100,S.richness+rb);S.freed++;toast(L('{0}を'+PL(sp)+'に返した(豊かさ+{1})',nm(sp),rb));sfx.tick();save();hud();renderTank();};d.appendChild(f);}
+  const b=document.createElement('button');b.className='sm b-sell';b.textContent=L('換える +{0}',V(sp));b.onclick=()=>{arr.splice(i,1);S.points+=V(sp);sfx.tick();save();hud();renderTank();};d.appendChild(b);
+  if(life){const f=document.createElement('button');f.className='sm b-free';f.textContent=L('返す');f.onclick=()=>{arr.splice(i,1);const g=Math.max(1,Math.round(V(sp)*.2)),rb=sp.r+(sp.bonus||0);S.points+=g;S.richness=Math.min(100,S.richness+rb);S.freed++;toast(L('{0}を'+PL(sp)+'に返した(豊かさ+{1})',nm(sp),rb));sfx.tick();save();hud();renderTank();};d.appendChild(f);}
   list.appendChild(d);};
  S.tank.forEach((_,i)=>row($('tlist'),S.tank,i,true));
  S.shelf.forEach((_,i)=>row($('slist'),S.shelf,i,false));
@@ -1724,7 +2088,7 @@ function openDex(){
  const grid=$('dexGrid');grid.innerHTML='';$('dexDetail').classList.remove('on');
  if(!S.unlocked.includes(dexSt))dexSt=1;
  const shown=SPECIES.filter(s=>s.st===dexSt);const got=shown.filter(s=>S.dex[s.id]).length;$('dexTitle').textContent=L('図鑑 {0}/{1}',got,shown.length);
- if(S.unlocked.length>1){const tb=document.createElement('div');tb.className='tabs';tb.style.gridColumn='1/-1';S.unlocked.slice().sort().forEach(i=>{const b=document.createElement('button');b.textContent=i===6?L('異界'):'Stage '+i;if(i===dexSt)b.className='on';b.onclick=()=>{dexSt=i;openDex();};tb.appendChild(b);});grid.appendChild(tb);}
+ if(S.unlocked.length>1){const tb=document.createElement('div');tb.className='tabs';tb.style.gridColumn='1/-1';ORDER.filter(i=>S.unlocked.includes(i)).concat(S.unlocked.includes(6)?[6]:[]).forEach(i=>{const b=document.createElement('button');b.textContent=i===6?L('異界'):'Stage '+DN(i);if(i===dexSt)b.className='on';b.onclick=()=>{dexSt=i;openDex();};tb.appendChild(b);});grid.appendChild(tb);}
  const groups=[['生き物','life'],['石','stone'],['化石','fossil']];
  for(const [lab,k] of groups){if(!shown.some(x=>x.kind===k))continue;const hd=document.createElement('div');hd.style.cssText='grid-column:1/-1;font-weight:700;font-size:13px;margin-top:4px';hd.textContent=L(lab);grid.appendChild(hd);
   shown.filter(s=>s.kind===k).forEach(sp=>{const known=!!S.dex[sp.id];const b=document.createElement('button');b.className='cell';
@@ -1737,7 +2101,7 @@ function showDetail(sp){
  const d=$('dexDetail'),known=!!S.dex[sp.id];d.innerHTML='';
  d.appendChild(sp.r===6&&!known?qCanvas():iconCanvas(sp,84,!known));
  const i=document.createElement('div');
- if(known)i.innerHTML=`<div class="nm">${nm(sp)}</div><div class="stars">${stars(sp.r)}</div><p>${L('出る場所: {0}',wh(sp))}</p><p>${hi(sp)}</p><p style="color:#7a6c55">${L('捕った数: {0} ・ 換えると {1}pt',S.dex[sp.id],VAL[sp.r])}</p>`;
+ if(known)i.innerHTML=`<div class="nm">${nm(sp)}</div><div class="stars">${stars(sp.r)}</div><p>${L('出る場所: {0}',wh(sp))}</p><p>${hi(sp)}</p><p style="color:#7a6c55">${L('捕った数: {0} ・ 換えると {1}pt',S.dex[sp.id],V(sp))}</p>`;
  else i.innerHTML=`<div class="nm">？？？</div><div class="stars">${sp.r===6?'':stars(sp.r)}</div><p>${L('まだ見つけていない。')}</p>${sp.r===6?'':`<p style="color:#7a6c55">${L('手がかり: {0}',wh(sp))}</p>`}`;
  d.appendChild(i);d.classList.add('on');d.scrollIntoView({block:'nearest'});
 }
@@ -1819,17 +2183,23 @@ $('resetBtn').onclick=e=>{const b=e.target;if(Date.now()-resetArm<3000){S=fresh(
 /* ---------- loop ---------- */
 function update(dt,now){
  waveV=S.stage===4?Math.cos(now*.0011)*.04:0;
+ if(S.stage===8&&!homing){if(!shade){shadeT-=dt;if(shadeT<=0){const l=Math.random()<.5;shade={kind:Math.random()<.5?'hippo':'croc',x:l?bankL-60:bankR+60,y:rnd(H*.2,H*.75),vx:(l?1:-1)*(bankR-bankL+120)/7000,t:0};toast('大きな影が近づいてくる…そっと待とう');}}
+  else{shade.t+=dt;shade.x+=shade.vx*dt;shade.y+=Math.sin(shade.t*.001)*.02*dt;if(shade.t>7000){shade=null;shadeT=rnd(22000,34000);}}}else if(S.stage!==8)shade=null;
+ if(zapFx){zapFx.t-=dt;if(zapFx.t<=0)zapFx=null;}
  for(const s of streaks){s.y+=(S.stage===4?waveV*1.6:rain?.08:.045)*dt;if(s.y>H+20){s.y=-30;s.x=rnd(bankL,bankR);}if(s.y<-40){s.y=H+10;s.x=rnd(bankL,bankR);}}
  if(S.stage===4&&!homing){bigWaveT-=dt;if(bigWaveT<=0){bigWaveT=rnd(22000,32000);toast('大きな波!何か打ち上げられたかも');const n=1+Math.floor(Math.random()*2);for(let i=0;i<n;i++){const sp=pick(x=>x.kind!=='life');items.push({sp,x:rnd(bankL+30,bankR-30),y:rnd(H*.15,H*.4),hx:0,hy:0,vx:rnd(-.02,.02),vy:.03,buried:false,seed:Math.floor(Math.random()*999),ph:0});}for(let i=0;i<12;i++)addMud(rnd(bankL,bankR),rnd(H*.1,H*.45),1);}}
  for(const e of ents){
   e.phase+=dt*.012*(Math.hypot(e.vx,e.vy)>.05?2.5:1);
   if(e.cool>0)e.cool-=dt;if(e.dart>0)e.dart-=dt;if(e.reveal>0)e.reveal-=dt;e.calm+=dt;
   if(e.state==='hide')continue;
+  if(e.state==='dive'){e.t-=dt;if(e.t<=0){e.state='idle';e.x=e.nx;e.y=e.ny;e.hx=e.x;e.hy=e.y;ripples.push({x:e.x,y:e.y,t:300,big:false});}continue;}
   if(e.state==='shell'){e.t-=dt;if(e.t<=0)e.state='idle';continue;}
+  if(e.zc>0)e.zc-=dt;
+  if(e.stun>0){e.stun-=dt;const fr0=Math.pow(.9,dt/16);e.vx*=fr0;e.vy*=fr0;e.x=clamp(e.x+e.vx*dt,bankL+8,bankR-8);e.y=clamp(e.y+e.vy*dt,8,H-8);continue;}
   if(e.sp.beh==='seaward'){e.vy=-.025;e.vx*=.9;e.x+=e.vx*dt;e.y+=e.vy*dt;e.ang=-Math.PI/2;if(e.y<-10)e.gone=true;continue;}
   if(e.state==='burrow'){e.t-=dt;if(e.t<=0)e.state='idle';if(e.sp.beh==='sandswim'){const fr=Math.pow(.985,dt/16);e.vx*=fr;e.vy*=fr;e.x=clamp(e.x+e.vx*dt,bankL+8,bankR-8);e.y=clamp(e.y+e.vy*dt,8,H-8);if(Math.random()<.05)addMud(e.x,e.y,1);}continue;}
   const innet=inNet(e.x,e.y);
-  const act={egg:.000002,shadow:.0001,shell:.00004,cling:.00001,ink:.00007,seaward:.00002,nibble:.00007,spin:.00012,sandswim:.00005,hop:.00004,spit:.0001,school:.00012,jump:.00005,still:.000004,normal:.0001,burrow:.00005,crab:.00007,dart:.00004,slow:.00004,fast:.00011,lurk:.00002}[e.sp.beh]*(innet?.3:1);
+  const act={puff:.00007,shock:.00006,dive:.00009,egg:.000002,shadow:.0001,shell:.00004,cling:.00001,ink:.00007,seaward:.00002,nibble:.00007,spin:.00012,sandswim:.00005,hop:.00004,spit:.0001,school:.00012,jump:.00005,still:.000004,normal:.0001,burrow:.00005,crab:.00007,dart:.00004,slow:.00004,fast:.00011,lurk:.00002}[e.sp.beh]*(innet?.3:1);
   e.vx+=rnd(-1,1)*act*dt;e.vy+=rnd(-1,1)*act*dt;
   if(e.sp.beh==='spin'){const a=(e.spinT>0?.16:.05)*dt/16;const c=Math.cos(a),sn=Math.sin(a);const vx=e.vx*c-e.vy*sn,vy=e.vx*sn+e.vy*c;e.vx=vx;e.vy=vy;if(e.spinT>0){e.spinT-=dt;const sp0=Math.hypot(e.vx,e.vy)||1;if(sp0<.25){e.vx*=.25/sp0;e.vy*=.25/sp0;}}}
   if(e.hops>0){e.hopT-=dt;if(e.hopT<=0){const k=inNet(e.x,e.y)?.45:1;e.vx=(e.hdx+rnd(-.3,.3))*.45*k;e.vy=(e.hdy+rnd(-.3,.3))*.45*k;e.hops--;e.hopT=280;e.dart=200;}}
@@ -1837,6 +2207,7 @@ function update(dt,now){
   if(innet){e.vx+=(net.x-e.x)*.000004*dt;e.vy+=(net.y-e.y)*.000004*dt;}
   else{const hk=e.sp.beh==='cling'?.00002:.0000018;e.vx+=(e.hx-e.x)*hk*dt;e.vy+=(e.hy-e.y)*hk*dt;}
   if(S.stage===4&&e.sp.beh!=='cling')e.y+=waveV*dt*.2;
+  if(flood&&S.stage===9&&!(innet&&spOn('jute'))){e.vy+=(innet?.000012:.00003)*dt;if(e.y>H-14&&!innet){e.y=14;e.x=rnd(bankL+20,bankR-20);e.hx=e.x;e.hy=rnd(H*.2,H*.7);}}
   if(e.sp.beh==='school')for(const o of ents)if(o!==e&&o.sp===e.sp){const dd=Math.hypot(o.x-e.x,o.y-e.y);if(dd<60&&dd>0){e.vx+=(o.vx-e.vx)*.01+(o.x-e.x)/dd*.00025*(dd>22?1:-1);e.vy+=(o.vy-e.vy)*.01+(o.y-e.y)/dd*.00025*(dd>22?1:-1);}}
   const fr=Math.pow(e.dart>0?.965:innet?.86:.93,dt/16);e.vx*=fr;e.vy*=fr;
   e.x+=e.vx*dt;e.y+=e.vy*dt;
@@ -1871,8 +2242,8 @@ function update(dt,now){
  glintT-=dt;if(glintT<=0){glintT=rnd(1400,2800);const b=items.filter(i=>i.buried);if(b.length){const fr=b.find(i=>i.sp.r===6);const it=fr&&Math.random()<.5?fr:b[Math.floor(Math.random()*b.length)];glints.push({x:it.x,y:it.y,t:0,mys:it.sp.r===6});}}
  if(comp){comp.ph+=dt*.012;
   if(comp.mode==='roam'){const a=now*.0005,tx=net.x+Math.cos(a)*W*.28,ty=Math.max(30,net.y-H*.38)+Math.sin(a*1.7)*H*.08;comp.vx+=(tx-comp.x)*.000012*dt;comp.vy+=(ty-comp.y)*.000012*dt;const sp0=Math.hypot(comp.vx,comp.vy);if(sp0>.14){comp.vx*=.14/sp0;comp.vy*=.14/sp0;}
-   comp.t-=dt;if(comp.t<=0&&!lifting&&!homing){comp.t=rnd(9000,14000);const c=ents.filter(e=>e.sp.kind==='life'&&!['hide','burrow','shell'].includes(e.state)&&e.sp.beh!=='seaward'&&!inNet(e.x,e.y)&&Math.hypot(e.x-net.x,e.y-net.y)<280);c.sort((p,q)=>Math.hypot(p.x-net.x,p.y-net.y)-Math.hypot(q.x-net.x,q.y-net.y));if(c.length){comp.tg=c[Math.floor(Math.random()*Math.min(3,c.length))];comp.mode='chase';}}}
-  else{const tg=comp.tg;if(!tg||!ents.includes(tg)||['hide','burrow','shell'].includes(tg.state)){comp.mode='roam';comp.tg=null;}
+   comp.t-=dt;if(comp.t<=0&&!lifting&&!homing){comp.t=rnd(9000,14000);const c=ents.filter(e=>e.sp.kind==='life'&&!['hide','burrow','shell','dive'].includes(e.state)&&e.sp.beh!=='seaward'&&!inNet(e.x,e.y)&&Math.hypot(e.x-net.x,e.y-net.y)<280);c.sort((p,q)=>Math.hypot(p.x-net.x,p.y-net.y)-Math.hypot(q.x-net.x,q.y-net.y));if(c.length){comp.tg=c[Math.floor(Math.random()*Math.min(3,c.length))];comp.mode='chase';}}}
+  else{const tg=comp.tg;if(!tg||!ents.includes(tg)||['hide','burrow','shell','dive'].includes(tg.state)){comp.mode='roam';comp.tg=null;}
    else{const dx=tg.x-comp.x,dy=tg.y-18-comp.y,d=Math.hypot(dx,dy)||1;comp.vx=dx/d*.3;comp.vy=dy/d*.3;
     if(d<16){const nx=net.x-tg.x,ny=net.y-tg.y,nd=Math.hypot(nx,ny)||1,v=Math.min(.7,nd*.0046);tg.vx=nx/nd*v;tg.vy=ny/nd*v;tg.hx=net.x;tg.hy=net.y;tg.calm=0;
      toast(L('子竜が{0}を網へ追い返してくれた!',nm(tg.sp)));ripples.push({x:tg.x,y:tg.y,t:0,big:true});tone(1047,.2,.04);tone(1319,.25,.035,.08);comp.mode='roam';comp.tg=null;comp.vy=-.2;}}}
@@ -1880,7 +2251,7 @@ function update(dt,now){
  let anyIn=false;
  if(!lifting){
   const chk=(o,i)=>{if(i&&!o.wasIn&&now-lastPop>600){pops.push({x:net.x,y:net.y-net.ry-6,t:0});lastPop=now;}o.wasIn=i;if(i)anyIn=true;};
-  for(const e of ents)chk(e,e.state!=='hide'&&inNet(e.x,e.y));
+  for(const e of ents)chk(e,e.state!=='hide'&&e.state!=='dive'&&inNet(e.x,e.y));
   for(const it of items)if(!it.buried)chk(it,inNet(it.x,it.y));
  }
  if(anyIn!==readyPrev){readyPrev=anyIn;$('liftBtn').classList.toggle('ready',anyIn&&CN().hp>0);}
@@ -1890,6 +2261,7 @@ function update(dt,now){
  if(lifting){lifting.t+=dt;if(lifting.t>200&&lifting.t<1000&&Math.random()<dt*.012)sfx.drip();if(lifting.t>=1150&&!lifting.done){lifting.done=true;finishLift();}}
 }
 function drawEnt(e,a){
+ if(e.state==='dive'){if(e.t<700){const a=1-e.t/700;ctx.strokeStyle=`rgba(255,255,255,${.5*a})`;ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(e.nx,e.ny,8+6*a,5+3*a,0,0,7);ctx.stroke();}return;}
  if(e.state==='hide'){if(spOn('soko')||Math.sin(e.phase*.25+e.seed)>.82){ctx.fillStyle='#c4573a';ctx.beginPath();ctx.arc(e.x-5,e.y+3,3,0,7);ctx.arc(e.x+5,e.y+3,3,0,7);ctx.fill();}return;}
  if(e.state==='burrow'&&spOn('soko'))drawSp(ctx,e.sp,e.x,e.y,RS,e.ang,0,{alpha:.45});
  if(e.state==='burrow'&&e.sp.beh==='sandswim'){ctx.fillStyle='rgba(215,190,140,.85)';ctx.beginPath();ctx.ellipse(e.x,e.y,12,5,Math.atan2(e.vy,e.vx),0,7);ctx.fill();ctx.strokeStyle='rgba(160,130,80,.6)';ctx.lineWidth=1;ctx.stroke();return;}
@@ -1899,7 +2271,7 @@ function drawEnt(e,a){
  if(e.sp.beh==='shadow'&&e.reveal<=0){drawSp(ctx,e.sp,e.x,e.y,RS,e.ang,e.phase,{alpha:spOn('ikai')?.35:.07});return;}
  let al=a;if(e.sp.beh==='still'&&e.reveal<=0&&!spOn('soko')&&!spOn('ikai'))al*=.35;else if(inZone('weed',e.x,e.y))al*=.78;
  const night=S.time>=2;
- drawSp(ctx,e.sp,e.x,e.y,RS,e.ang,e.phase,{alpha:al,glow:e.sp.id==='hotaru'&&night});
+ drawSp(ctx,e.sp,e.x,e.y,RS,e.ang,e.phase,{alpha:al,glow:e.sp.id==='hotaru'&&night,puff:e.stun>0&&e.sp.beh==='puff'});
 }
 function drawNet(p,LF){
  const x=net.x,y=net.y-p*net.ry*.9,rx=net.rx*(1-p*.1),ry=net.ry*(1-p*.3);
@@ -1927,7 +2299,15 @@ function draw(now){
  for(const g of glints){const a=Math.sin(g.t/700*Math.PI),r=(g.mys?5:3)+a*(g.mys?8:5);if(g.mys){const gr=ctx.createRadialGradient(g.x,g.y,0,g.x,g.y,r*2);gr.addColorStop(0,`rgba(190,150,255,${a*.6})`);gr.addColorStop(1,'rgba(190,150,255,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(g.x,g.y,r*2,0,7);ctx.fill();}ctx.strokeStyle=g.mys?`rgba(215,190,255,${a})`:`rgba(255,255,240,${a*.9})`;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(g.x-r,g.y);ctx.lineTo(g.x+r,g.y);ctx.moveTo(g.x,g.y-r);ctx.lineTo(g.x,g.y+r);ctx.stroke();}
  for(const it of items)if(!it.buried)drawSp(ctx,it.sp,it.x,it.y,RS,0,it.ph,{seed:it.seed});
  for(const e of ents)if(e.sp.id==='nijiunagi'&&e.trail){ctx.lineCap='round';e.trail.forEach((q,i)=>{ctx.strokeStyle=`hsla(${(i*25+now*.1)%360},90%,70%,${i/e.trail.length*.5})`;ctx.lineWidth=4;if(i){const p0=e.trail[i-1];ctx.beginPath();ctx.moveTo(p0.x,p0.y);ctx.lineTo(q.x,q.y);ctx.stroke();}});}
+ if(S.stage===9&&S.time===2){for(let i=0;i<5;i++){const x=bankL+(bankR-bankL)*(.15+pr(i*3+1)*.7)+Math.sin(now*.001+i)*8,y=((now*.018+i*190)%(H+80))-40;ctx.fillStyle='#8a5a2a';ctx.beginPath();ctx.ellipse(x,y,7,4.5,0,0,7);ctx.fill();const fl=1+.15*Math.sin(now*.02+i*3);const gr=ctx.createRadialGradient(x,y-3,0,x,y-3,16*fl);gr.addColorStop(0,'rgba(255,220,120,.8)');gr.addColorStop(1,'rgba(255,180,60,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(x,y-3,16*fl,0,7);ctx.fill();ctx.fillStyle='#ffe58a';ctx.beginPath();ctx.ellipse(x,y-4,2,4*fl,0,0,7);ctx.fill();}}
+ if(shade){const a=Math.min(1,shade.t/800,(7000-shade.t)/800)*.38;ctx.save();ctx.translate(shade.x,shade.y);if(shade.vx<0)ctx.scale(-1,1);ctx.fillStyle=`rgba(15,25,30,${a})`;
+  if(shade.kind==='hippo'){ctx.beginPath();ctx.ellipse(0,0,70,40,0,0,7);ctx.fill();ctx.beginPath();ctx.ellipse(66,0,30,26,0,0,7);ctx.fill();ctx.beginPath();ctx.arc(70,-22,6,0,7);ctx.arc(70,22,6,0,7);ctx.fill();}
+  else{ctx.beginPath();ctx.ellipse(0,0,55,17,0,0,7);ctx.fill();ctx.beginPath();ctx.moveTo(50,-10);ctx.lineTo(105,-5);ctx.lineTo(105,5);ctx.lineTo(50,10);ctx.fill();ctx.beginPath();ctx.moveTo(-50,-9);ctx.quadraticCurveTo(-90,Math.sin(shade.t*.004)*14,-125,0);ctx.quadraticCurveTo(-90,Math.sin(shade.t*.004)*14+4,-50,9);ctx.fill();for(const [x,y] of [[25,-20],[25,20],[-25,-19],[-25,19]]){ctx.beginPath();ctx.ellipse(x,y,9,5,0,0,7);ctx.fill();}}
+  ctx.restore();}
  for(const e of ents)drawEnt(e,1);
+ for(const e of ents)if(e.sp.id==='mouthbrooder'&&inNet(e.x,e.y)&&e.state!=='hide'){ctx.fillStyle='rgba(255,215,150,.85)';for(let i=0;i<6;i++){const a=now*.002+i*1.05,rr=14+6*Math.sin(now*.003+i);ctx.beginPath();ctx.ellipse(e.x+Math.cos(a)*rr,e.y+Math.sin(a)*rr,2.6,1.4,a+1.57,0,7);ctx.fill();}}
+ for(const e of ents)if(e.stun>0){ctx.strokeStyle='rgba(255,240,120,.8)';ctx.lineWidth=1.3;const k=now*.02;ctx.beginPath();ctx.moveTo(e.x-6,e.y-14);ctx.lineTo(e.x-2+Math.sin(k)*2,e.y-19);ctx.lineTo(e.x+2,e.y-15);ctx.lineTo(e.x+6,e.y-21);ctx.stroke();}
+ if(zapFx){const a=zapFx.t/450;ctx.strokeStyle=`rgba(255,245,140,${a})`;ctx.lineWidth=2;for(let i=0;i<7;i++){const an=i/7*6.28+zapFx.t*.01;ctx.beginPath();let x=zapFx.x,y=zapFx.y;ctx.moveTo(x,y);for(let j=1;j<5;j++){x=zapFx.x+Math.cos(an)*j*28+rnd(-6,6);y=zapFx.y+Math.sin(an)*j*28+rnd(-6,6);ctx.lineTo(x,y);}ctx.stroke();}ctx.fillStyle=`rgba(255,250,200,${a*.25})`;ctx.beginPath();ctx.arc(zapFx.x,zapFx.y,135,0,7);ctx.fill();}
  for(const g of ghosts){if(g.delay>0)continue;const a=clamp(g.life/g.max,0,1);
   if(g.sp.beh==='burrow'){ctx.fillStyle=`rgba(95,70,40,${.7*a})`;ctx.beginPath();ctx.ellipse(g.x,g.y,11*a+4,6,0,0,7);ctx.fill();if(a<.6)continue;}
   drawSp(ctx,g.sp,g.x,g.y,RS,g.sp.beh==='crab'?-Math.PI/2:Math.atan2(g.vy,g.vx)+(g.sp.beh==='jump'?Math.PI:0),g.ph,{alpha:a});}
